@@ -1,0 +1,21 @@
+﻿batiment,ressource,valeur,seuil,date,alerte
+Biblio,électricité,152,200,3/28/2026,false
+Resto,eau,360,500,6/16/2026,false
+Dep. info,chauffage,1,20,3/2/2026,false
+Dep. mec,chauffage,457,458,6/2/2026,false
+buvette,eau,400,451,10/26/2026,false
+Amphi A,électricité,285,250,10/27/2026,true
+Amphi B,électricité,190,250,10/28/2026,false
+Laboratoire,eau,620,550,10/29/2026,true
+Atelier,chauffage,35,40,10/30/2026,false
+Administration,électricité,310,300,10/31/2026,true
+Salle info 1,électricité,245,280,11/1/2026,false
+Salle info 2,électricité,295,280,11/2/2026,true
+Internat,eau,480,500,11/3/2026,false
+Restaurant,électricité,530,450,11/4/2026,true
+Bloc C,chauffage,18,25,11/5/2026,false
+Bloc D,eau,570,500,11/6/2026,true
+Salle réunion,électricité,125,180,11/7/2026,false
+Gymnase,eau,430,450,11/8/2026,false
+Bibliothèque annexe,électricité,275,260,11/9/2026,true
+Laboratoire réseau,chauffage,42,35,11/10/2026,true
