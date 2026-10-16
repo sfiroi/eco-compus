@@ -161,7 +161,7 @@ int main() {
     fprintf(fjson, "[\n");
     int vergule=0;
     n = conv("measures_in.csv", tableau, 100);
-    
+
     if (n == -1)
         return 1;
 
@@ -519,4 +519,64 @@ float calculerTotalEau(Mesure tab[], int n)
             total+=tab[i].valeur;
     }
     return total;
+}
+
+void minus(char *copie, char *txt) {
+    int i;
+    for (i = 0; txt[i] != '\0'; i++)
+        copie[i] = tolower(txt[i]);
+    copie[i] = '\0';
+}
+
+int contient(char *texte, char *mot) {
+    char t[50], m[50];
+    minus(t, texte);
+    minus(m, mot);
+    return strstr(t, m) != NULL;
+}
+
+int rechercher(Mesure t[], int n, char *mot) {
+    int trv = 0;
+    for (int i = 0; i < n; i++) {
+        if (contient(t[i].batiment, mot) || contient(t[i].ressource, mot)) {
+            float pourcent = 0;
+            if (t[i].seuil != 0)
+                pourcent = (t[i].valeur / t[i].seuil) * 100;
+
+            printf("Bâtiment: %s | Ressource: %s | Date: %s | Valeur: %.2f / %.2f (%.1f%%) | %s\n",t[i].batiment, t[i].ressource, t[i].date,t[i].valeur, t[i].seuil, pourcent,t[i].alerte ? "ALERTE" : "ok");
+            trv++;
+        }
+    }
+    return trv;
+}
+
+void moyenne(Mesure t[], int n, int annee_cible) {
+    char *ressources[] = {"eau", "électricité","chauffage"};
+    int nb_ressources = sizeof ressources / sizeof ressources[0];
+
+    printf("\n--- Statistiques pour l'année %d ---\n", annee_cible);
+
+    for (int r = 0; r < nb_ressources; r++) {
+        float total_valeur = 0;
+        float total_seuil = 0;
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            int mois, jour, annee;
+            if (strcmp(t[i].ressource, ressources[r]) == 0 &&sscanf(t[i].date, "%d/%d/%d", &mois, &jour, &annee) == 3 &&annee == annee_cible) {
+                total_valeur += t[i].valeur;
+                total_seuil += t[i].seuil;
+                count++;
+            }
+        }
+
+        if (count > 0) {
+            float moyenne = total_valeur / count;
+            float pourcent = (total_seuil != 0) ? (total_valeur / total_seuil) * 100 : 0;
+            printf("%s : moyenne = %.2f | pourcentage = %.1f%%\n",
+                   ressources[r], moyenne, pourcent);
+        } else {
+            printf("%s : aucune donnée\n", ressources[r]);
+        }
+    }
 }
