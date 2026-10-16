@@ -1,0 +1,398 @@
+[
+  {
+    "id": 1,
+    "batiment": "Biblio",
+    "ressource": "electricite",
+    "valeur": 15.0,
+    "seuil": 200.0,
+    "date": "03/28/2026",
+    "alerte": false
+  },
+  {
+    "id": 2,
+    "batiment": "Resto",
+    "ressource": "eau",
+    "valeur": 360.0,
+    "seuil": 500.0,
+    "date": "06/16/2026",
+    "alerte": false
+  },
+  {
+    "id": 3,
+    "batiment": "Dep. info",
+    "ressource": "chauffage",
+    "valeur": 1.0,
+    "seuil": 20.0,
+    "date": "03/02/2026",
+    "alerte": false
+  },
+  {
+    "id": 4,
+    "batiment": "Dep. mec",
+    "ressource": "chauffage",
+    "valeur": 457.0,
+    "seuil": 458.0,
+    "date": "06/02/2026",
+    "alerte": false
+  },
+  {
+    "id": 5,
+    "batiment": "buvette",
+    "ressource": "eau",
+    "valeur": 400.0,
+    "seuil": 451.0,
+    "date": "10/26/2026",
+    "alerte": false
+  },
+  {
+    "id": 6,
+    "batiment": "Amphi A",
+    "ressource": "electricite",
+    "valeur": 285.0,
+    "seuil": 250.0,
+    "date": "10/27/2026",
+    "alerte": true
+  },
+  {
+    "id": 7,
+    "batiment": "Amphi B",
+    "ressource": "electricite",
+    "valeur": 190.0,
+    "seuil": 250.0,
+    "date": "10/28/2026",
+    "alerte": false
+  },
+  {
+    "id": 8,
+    "batiment": "Laboratoire",
+    "ressource": "eau",
+    "valeur": 620.0,
+    "seuil": 550.0,
+    "date": "10/29/2026",
+    "alerte": true
+  },
+  {
+    "id": 9,
+    "batiment": "Atelier",
+    "ressource": "chauffage",
+    "valeur": 35.0,
+    "seuil": 40.0,
+    "date": "10/30/2026",
+    "alerte": false
+  },
+  {
+    "id": 10,
+    "batiment": "Administration",
+    "ressource": "electricite",
+    "valeur": 310.0,
+    "seuil": 300.0,
+    "date": "10/31/2026",
+    "alerte": true
+  },
+  {
+    "id": 11,
+    "batiment": "Salle info 1",
+    "ressource": "electricite",
+    "valeur": 245.0,
+    "seuil": 280.0,
+    "date": "11/01/2026",
+    "alerte": false
+  },
+  {
+    "id": 13,
+    "batiment": "Internat",
+    "ressource": "eau",
+    "valeur": 480.0,
+    "seuil": 500.0,
+    "date": "11/03/2026",
+    "alerte": false
+  },
+  {
+    "id": 14,
+    "batiment": "Restaurant",
+    "ressource": "electricite",
+    "valeur": 530.0,
+    "seuil": 450.0,
+    "date": "11/04/2026",
+    "alerte": true
+  },
+  {
+    "id": 15,
+    "batiment": "Bloc C",
+    "ressource": "chauffage",
+    "valeur": 18.0,
+    "seuil": 25.0,
+    "date": "11/05/2026",
+    "alerte": false
+  },
+  {
+    "id": 16,
+    "batiment": "Bloc D",
+    "ressource": "eau",
+    "valeur": 570.0,
+    "seuil": 500.0,
+    "date": "11/06/2026",
+    "alerte": true
+  },
+  {
+    "id": 17,
+    "batiment": "Salle reunion",
+    "ressource": "electricite",
+    "valeur": 125.0,
+    "seuil": 180.0,
+    "date": "11/07/2026",
+    "alerte": false
+  },
+  {
+    "id": 18,
+    "batiment": "Gymnase",
+    "ressource": "eau",
+    "valeur": 430.0,
+    "seuil": 450.0,
+    "date": "11/08/2026",
+    "alerte": false
+  },
+  {
+    "id": 19,
+    "batiment": "Bibliotheque annexe",
+    "ressource": "electricite",
+    "valeur": 275.0,
+    "seuil": 260.0,
+    "date": "11/09/2026",
+    "alerte": true
+  },
+  {
+    "id": 20,
+    "batiment": "Laboratoire reseau",
+    "ressource": "chauffage",
+    "valeur": 42.0,
+    "seuil": 35.0,
+    "date": "11/10/2026",
+    "alerte": true
+  },
+  {
+    "id": 21,
+    "batiment": "Biblio",
+    "ressource": "electricite",
+    "valeur": 18.0,
+    "seuil": 200.0,
+    "date": "04/28/2026",
+    "alerte": false
+  },
+  {
+    "id": 22,
+    "batiment": "Resto",
+    "ressource": "eau",
+    "valeur": 420.0,
+    "seuil": 500.0,
+    "date": "07/16/2026",
+    "alerte": false
+  },
+  {
+    "id": 23,
+    "batiment": "Dep. info",
+    "ressource": "chauffage",
+    "valeur": 5.0,
+    "seuil": 20.0,
+    "date": "04/02/2026",
+    "alerte": false
+  },
+  {
+    "id": 24,
+    "batiment": "Dep. mec",
+    "ressource": "chauffage",
+    "valeur": 460.0,
+    "seuil": 458.0,
+    "date": "07/02/2026",
+    "alerte": true
+  },
+  {
+    "id": 25,
+    "batiment": "buvette",
+    "ressource": "eau",
+    "valeur": 350.0,
+    "seuil": 451.0,
+    "date": "11/26/2026",
+    "alerte": false
+  },
+  {
+    "id": 26,
+    "batiment": "Amphi A",
+    "ressource": "electricite",
+    "valeur": 270.0,
+    "seuil": 250.0,
+    "date": "11/27/2026",
+    "alerte": true
+  },
+  {
+    "id": 27,
+    "batiment": "Amphi B",
+    "ressource": "electricite",
+    "valeur": 210.0,
+    "seuil": 250.0,
+    "date": "11/28/2026",
+    "alerte": false
+  },
+  {
+    "id": 28,
+    "batiment": "Laboratoire",
+    "ressource": "eau",
+    "valeur": 580.0,
+    "seuil": 550.0,
+    "date": "11/29/2026",
+    "alerte": true
+  },
+  {
+    "id": 29,
+    "batiment": "Atelier",
+    "ressource": "chauffage",
+    "valeur": 30.0,
+    "seuil": 40.0,
+    "date": "11/30/2026",
+    "alerte": false
+  },
+  {
+    "id": 30,
+    "batiment": "Administration",
+    "ressource": "electricite",
+    "valeur": 280.0,
+    "seuil": 300.0,
+    "date": "12/01/2026",
+    "alerte": false
+  },
+  {
+    "id": 31,
+    "batiment": "Salle info 1",
+    "ressource": "electricite",
+    "valeur": 220.0,
+    "seuil": 280.0,
+    "date": "12/02/2026",
+    "alerte": false
+  },
+  {
+    "id": 32,
+    "batiment": "Salle info 2",
+    "ressource": "electricite",
+    "valeur": 310.0,
+    "seuil": 280.0,
+    "date": "12/03/2026",
+    "alerte": true
+  },
+  {
+    "id": 33,
+    "batiment": "Internat",
+    "ressource": "eau",
+    "valeur": 460.0,
+    "seuil": 500.0,
+    "date": "12/04/2026",
+    "alerte": false
+  },
+  {
+    "id": 34,
+    "batiment": "Restaurant",
+    "ressource": "electricite",
+    "valeur": 490.0,
+    "seuil": 450.0,
+    "date": "12/05/2026",
+    "alerte": true
+  },
+  {
+    "id": 35,
+    "batiment": "Bloc C",
+    "ressource": "chauffage",
+    "valeur": 20.0,
+    "seuil": 25.0,
+    "date": "12/06/2026",
+    "alerte": false
+  },
+  {
+    "id": 36,
+    "batiment": "Bloc D",
+    "ressource": "eau",
+    "valeur": 530.0,
+    "seuil": 500.0,
+    "date": "12/07/2026",
+    "alerte": true
+  },
+  {
+    "id": 37,
+    "batiment": "Salle reunion",
+    "ressource": "electricite",
+    "valeur": 140.0,
+    "seuil": 180.0,
+    "date": "12/08/2026",
+    "alerte": false
+  },
+  {
+    "id": 38,
+    "batiment": "Gymnase",
+    "ressource": "eau",
+    "valeur": 410.0,
+    "seuil": 450.0,
+    "date": "12/09/2026",
+    "alerte": false
+  },
+  {
+    "id": 39,
+    "batiment": "Bibliotheque annexe",
+    "ressource": "electricite",
+    "valeur": 250.0,
+    "seuil": 260.0,
+    "date": "12/10/2026",
+    "alerte": false
+  },
+  {
+    "id": 40,
+    "batiment": "Laboratoire reseau",
+    "ressource": "chauffage",
+    "valeur": 38.0,
+    "seuil": 35.0,
+    "date": "12/11/2026",
+    "alerte": true
+  },
+  {
+    "id": 41,
+    "batiment": "Biblio",
+    "ressource": "electricite",
+    "valeur": 17.0,
+    "seuil": 200.0,
+    "date": "05/28/2026",
+    "alerte": false
+  },
+  {
+    "id": 42,
+    "batiment": "Biblio",
+    "ressource": "electricite",
+    "valeur": 19.0,
+    "seuil": 200.0,
+    "date": "06/28/2026",
+    "alerte": false
+  },
+  {
+    "id": 43,
+    "batiment": "Resto",
+    "ressource": "eau",
+    "valeur": 380.0,
+    "seuil": 500.0,
+    "date": "08/16/2026",
+    "alerte": false
+  },
+  {
+    "id": 44,
+    "batiment": "Amphi A",
+    "ressource": "electricite",
+    "valeur": 240.0,
+    "seuil": 250.0,
+    "date": "12/27/2026",
+    "alerte": false
+  },
+  {
+    "id": 45,
+    "batiment": "Laboratoire",
+    "ressource": "eau",
+    "valeur": 600.0,
+    "seuil": 550.0,
+    "date": "12/29/2026",
+    "alerte": true
+  }
+]

@@ -1,46 +1,45 @@
-﻿batiment,ressource,valeur,seuil,date,alerte
-Biblio,électricité,15,200,3/28/2026,false
-Resto,eau,360,500,6/16/2026,false
-Dep. info,chauffage,1,20,3/2/2026,false
-Dep. mec,chauffage,457,458,6/2/2026,false
-buvette,eau,400,451,10/26/2026,false
-Amphi A,électricité,285,250,10/27/2026,true
-Amphi B,électricité,190,250,10/28/2026,false
-Laboratoire,eau,620,550,10/29/2026,true
-Atelier,chauffage,35,40,10/30/2026,false
-Administration,électricité,310,300,10/31/2026,true
-Salle info 1,électricité,245,280,11/1/2026,false
-Salle info 2,électricité,295,280,11/2/2026,true
-Internat,eau,480,500,11/3/2026,false
-Restaurant,électricité,530,450,11/4/2026,true
-Bloc C,chauffage,18,25,11/5/2026,false
-Bloc D,eau,570,500,11/6/2026,true
-Salle réunion,électricité,125,180,11/7/2026,false
-Gymnase,eau,430,450,11/8/2026,false
-Bibliothèque annexe,électricité,275,260,11/9/2026,true
-Laboratoire réseau,chauffage,42,35,11/10/2026,true
-Biblio,électricité,18,200,4/28/2026,false
-Resto,eau,420,500,7/16/2026,false
-Dep. info,chauffage,5,20,4/2/2026,false
-Dep. mec,chauffage,460,458,7/2/2026,true
-buvette,eau,350,451,11/26/2026,false
-Amphi A,électricité,270,250,11/27/2026,true
-Amphi B,électricité,210,250,11/28/2026,false
-Laboratoire,eau,580,550,11/29/2026,true
-Atelier,chauffage,30,40,11/30/2026,false
-Administration,électricité,280,300,12/1/2026,false
-Salle info 1,électricité,220,280,12/2/2026,false
-Salle info 2,électricité,310,280,12/3/2026,true
-Internat,eau,460,500,12/4/2026,false
-Restaurant,électricité,490,450,12/5/2026,true
-Bloc C,chauffage,20,25,12/6/2026,false
-Bloc D,eau,530,500,12/7/2026,true
-Salle réunion,électricité,140,180,12/8/2026,false
-Gymnase,eau,410,450,12/9/2026,false
-Bibliothèque annexe,électricité,250,260,12/10/2026,false
-Laboratoire réseau,chauffage,38,35,12/11/2026,true
-Biblio,électricité,17,200,5/28/2026,false
-Biblio,électricité,19,200,6/28/2026,false
-Resto,eau,380,500,8/16/2026,false
-Amphi A,électricité,240,250,12/27/2026,false
-Laboratoire,eau,600,550,12/29/2026,true
+id,batiment,ressource,valeur,seuil,date,alerte
+1,Biblio,electricite,15.0,200.0,03/28/2026,false
+2,Resto,eau,360.0,500.0,06/16/2026,false
+3,Dep. info,chauffage,1.0,20.0,03/02/2026,false
+4,Dep. mec,chauffage,457.0,458.0,06/02/2026,false
+5,buvette,eau,400.0,451.0,10/26/2026,false
+6,Amphi A,electricite,285.0,250.0,10/27/2026,true
+7,Amphi B,electricite,190.0,250.0,10/28/2026,false
+8,Laboratoire,eau,620.0,550.0,10/29/2026,true
+9,Atelier,chauffage,35.0,40.0,10/30/2026,false
+10,Administration,electricite,310.0,300.0,10/31/2026,true
+11,Salle info 1,electricite,245.0,280.0,11/01/2026,false
+13,Internat,eau,480.0,500.0,11/03/2026,false
+14,Restaurant,electricite,530.0,450.0,11/04/2026,true
+15,Bloc C,chauffage,18.0,25.0,11/05/2026,false
+16,Bloc D,eau,570.0,500.0,11/06/2026,true
+17,Salle reunion,electricite,125.0,180.0,11/07/2026,false
+18,Gymnase,eau,430.0,450.0,11/08/2026,false
+19,Bibliotheque annexe,electricite,275.0,260.0,11/09/2026,true
+20,Laboratoire reseau,chauffage,42.0,35.0,11/10/2026,true
+21,Biblio,electricite,18.0,200.0,04/28/2026,false
+22,Resto,eau,420.0,500.0,07/16/2026,false
+23,Dep. info,chauffage,5.0,20.0,04/02/2026,false
+24,Dep. mec,chauffage,460.0,458.0,07/02/2026,true
+25,buvette,eau,350.0,451.0,11/26/2026,false
+26,Amphi A,electricite,270.0,250.0,11/27/2026,true
+27,Amphi B,electricite,210.0,250.0,11/28/2026,false
+28,Laboratoire,eau,580.0,550.0,11/29/2026,true
+29,Atelier,chauffage,30.0,40.0,11/30/2026,false
+30,Administration,electricite,280.0,300.0,12/01/2026,false
+31,Salle info 1,electricite,220.0,280.0,12/02/2026,false
+32,Salle info 2,electricite,310.0,280.0,12/03/2026,true
+33,Internat,eau,460.0,500.0,12/04/2026,false
+34,Restaurant,electricite,490.0,450.0,12/05/2026,true
+35,Bloc C,chauffage,20.0,25.0,12/06/2026,false
+36,Bloc D,eau,530.0,500.0,12/07/2026,true
+37,Salle reunion,electricite,140.0,180.0,12/08/2026,false
+38,Gymnase,eau,410.0,450.0,12/09/2026,false
+39,Bibliotheque annexe,electricite,250.0,260.0,12/10/2026,false
+40,Laboratoire reseau,chauffage,38.0,35.0,12/11/2026,true
+41,Biblio,electricite,17.0,200.0,05/28/2026,false
+42,Biblio,electricite,19.0,200.0,06/28/2026,false
+43,Resto,eau,380.0,500.0,08/16/2026,false
+44,Amphi A,electricite,240.0,250.0,12/27/2026,false
+45,Laboratoire,eau,600.0,550.0,12/29/2026,true

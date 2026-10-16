@@ -21,12 +21,19 @@ int conv(char nomFichier[], Mesure tableau[], int max)
     }
 
     fgets(ligne, sizeof(ligne), f);
-
+    int i=1;
     while (fgets(ligne, sizeof(ligne), f) != NULL && n < max)
     {
         char *token;
+        
 
         token = strtok(ligne, ",");
+
+        if (token == NULL)
+            continue;
+
+        tableau[n].id=atoi(token);
+        token = strtok(NULL, ",");
 
         if (token == NULL)
             continue;
@@ -72,6 +79,7 @@ int conv(char nomFichier[], Mesure tableau[], int max)
             tableau[n].alerte = 0;
 
         n++;
+        i++;
     }
 
     fclose(f);
@@ -172,7 +180,7 @@ void afficher(Mesure tableau[], int n)
 
     for (i = 0; i < n; i++)
     {
-        printf("\nMesure %d\n", i + 1);
+        printf("\nMesure %d\n", tableau[i].id);
 
         printf("Batiment  : %s\n", tableau[i].batiment);
         printf("Ressource : %s\n", tableau[i].ressource);
@@ -294,27 +302,30 @@ void afficherMesures(const Mesure *tab, int n)
    Sauvegarder CSV
    ========================================================= */
 
-static int sauvegarderCSV(const char *fichierCSV,
-                          Mesure *tab,
-                          int n)
+int sauvegarderCSV(const char *fichierCSV,
+                   Mesure *tab,
+                   int n)
 {
     FILE *f = fopen(fichierCSV, "w");
 
     if (!f)
     {
-        printf("Erreur : impossible d'ouvrir %s\n",
-               fichierCSV);
-
+        printf("Erreur : impossible d'ouvrir %s\n", fichierCSV);
         return 0;
     }
 
-    fprintf(f, "id,valeur\n");
+    fprintf(f, "id,batiment,ressource,valeur,seuil,date,alerte\n");
 
     for (int i = 0; i < n; i++)
     {
-        fprintf(f, "%d,%.2f\n",
+        fprintf(f, "%d,%s,%s,%.1f,%.1f,%s,%s\n",
                 tab[i].id,
-                tab[i].valeur);
+                tab[i].batiment,
+                tab[i].ressource,
+                tab[i].valeur,
+                tab[i].seuil,
+                tab[i].date,
+                tab[i].alerte ? "true" : "false");
     }
 
     fclose(f);
@@ -327,17 +338,15 @@ static int sauvegarderCSV(const char *fichierCSV,
    Sauvegarder JSON
    ========================================================= */
 
-static int sauvegarderJSON(const char *fichierJSON,
-                           Mesure *tab,
-                           int n)
+int sauvegarderJSON(const char *fichierJSON,
+                    Mesure *tab,
+                    int n)
 {
     FILE *f = fopen(fichierJSON, "w");
 
     if (!f)
     {
-        printf("Erreur : impossible d'ouvrir %s\n",
-               fichierJSON);
-
+        printf("Erreur : impossible d'ouvrir %s\n", fichierJSON);
         return 0;
     }
 
@@ -345,10 +354,18 @@ static int sauvegarderJSON(const char *fichierJSON,
 
     for (int i = 0; i < n; i++)
     {
-        fprintf(f,
-                "  {\"id\": %d, \"valeur\": %.2f}%s\n",
-                tab[i].id,
-                tab[i].valeur,
+        fprintf(f, "  {\n");
+
+        fprintf(f, "    \"id\": %d,\n", tab[i].id);
+        fprintf(f, "    \"batiment\": \"%s\",\n", tab[i].batiment);
+        fprintf(f, "    \"ressource\": \"%s\",\n", tab[i].ressource);
+        fprintf(f, "    \"valeur\": %.1f,\n", tab[i].valeur);
+        fprintf(f, "    \"seuil\": %.1f,\n", tab[i].seuil);
+        fprintf(f, "    \"date\": \"%s\",\n", tab[i].date);
+        fprintf(f, "    \"alerte\": %s\n",
+                tab[i].alerte ? "true" : "false");
+
+        fprintf(f, "  }%s\n",
                 (i < n - 1) ? "," : "");
     }
 
@@ -358,7 +375,6 @@ static int sauvegarderJSON(const char *fichierJSON,
 
     return 1;
 }
-
 
 /* =========================================================
    Supprimer une mesure
@@ -430,9 +446,16 @@ void insererMesure(Mesure *tab,
                    const char *fichierCSV,
                    const char *fichierJSON)
 {
-    tab[*n] = nov;
+     if (*n == 0)
+        nov.id = 1;
+    else
+        nov.id = tab[*n - 1].id + 1;
 
+    
+    tab[*n] = nov;
     (*n)++;
+
+    
 
     int okCSV =
         sauvegarderCSV(fichierCSV, tab, *n);
@@ -461,27 +484,25 @@ void insererMesure(Mesure *tab,
 
 int verifierMesure(Mesure m)
 {
-    if (strcmp(m.batiment, "Dep Info") != 0 &&
-        strcmp(m.batiment, "Dep Meca") != 0 &&
-        strcmp(m.batiment, "Resto") != 0)
-    {
-        return 0;
-    }
+    
 
-    if (strcmp(m.ressource, "Elec") != 0 &&
-        strcmp(m.ressource, "Eau") != 0 &&
-        strcmp(m.ressource, "Chauffage"))
+    if (strcmp(m.ressource, "electricite") != 0 &&
+        strcmp(m.ressource, "eau") != 0 &&
+        strcmp(m.ressource, "chauffage"))
     {
+        printf("e");
         return 0;
     }
 
     if (m.valeur <= 0 || m.seuil <= 0)
     {
+        printf("ep");
         return 0;
     }
 
     if (!date_valide(m.date))
     {
+        printf("es");
         return 0;
     }
 
