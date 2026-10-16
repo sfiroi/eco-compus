@@ -405,3 +405,118 @@ Mesure min(Mesure t[],int n,char* bat,char* res) {
     }
     return min;
 }
+void detecterAnomalies(Mesure tab[],int n)
+{
+    int i;
+    int nbAnomalies=0;
+    for (i=0;i<n;i++)
+    {
+        tab[i].alerte=(tab[i].valeur>tab[i].seuil);
+        if(tab[i].alerte==1)
+        {
+            printf("Anomalie : %s | %s | valeur %.2f > seuil %.2f\n",tab[i].batiment,tab[i].ressource,tab[i].valeur,tab[i].seuil);
+            nbAnomalies++;
+        }
+    }
+    if (nbAnomalies==0)
+        printf("Aucune anomalie detectee.\n");
+}
+
+void trieMesures(Mesure tab[],int n)
+{
+    int i,j;
+    Mesure temp;
+    for(i=0;i<n-1;i++)
+    {
+        for(j=0;j<n-i-1;j++)
+        {
+            if(tab[j].valeur>tab[j+1].valeur)
+            {
+                temp=tab[j];
+                tab[j]=tab[j+1];
+                tab[j+1]=temp;
+            }
+        }
+    }
+}
+
+void afficherMesure(Mesure m)
+{
+    printf("%s | %s | %.2f | %.2f | %s | alerte=%d\n",m.batiment,m.ressource,m.valeur,m.seuil,m.date,m.alerte);
+}
+
+void comparerDeuxBatiments(Mesure tab[],int n,char bat1[],char bat2[],char ressource[])
+{
+    float consommation1=0;
+    float consommation2=0;
+    int trouve1=0;
+    int trouve2=0;
+    int i;
+    for(i=0;i<n;i++)
+    {
+        if(strcmp(tab[i].ressource,ressource)==0)
+        {
+            if(strcmp(tab[i].batiment,bat1)==0)
+            {
+                consommation1+=tab[i].valeur;
+                trouve1=1;
+            }
+            if(strcmp(tab[i].batiment,bat2)==0)
+            {
+                consommation2+=tab[i].valeur;
+                trouve2=1;
+            }
+        }
+    }
+    if(!trouve1||!trouve2)
+    {
+        printf("Erreur : batiment ou ressource introuvable.\n");
+        return;
+    }
+    printf("\n--- Comparaison des deux batiments (%s) ---\n",ressource);
+    printf("%s : %.2f\n",bat1,consommation1);
+    printf("%s : %.2f\n",bat2,consommation2);
+
+    if(consommation1>consommation2)
+        printf("%s consomme plus de %s.\n",bat1,ressource);
+    else if(consommation2>consommation1)
+        printf("%s consomme plus de %s.\n",bat2,ressource);
+    else
+        printf("Les deux batiments ont la meme consommation.\n");
+}
+
+float calculerTotalEnergie(Mesure tab[], int n)
+{
+    float total=0;
+    int i;
+    for(i=0;i<n;i++)
+    {
+        if(strcmp(tab[i].ressource,"electricite")==0)
+            total+=tab[i].valeur;
+    }
+    return total;
+}
+
+float calculerTotalChauffage(Mesure tab[], int n)
+{
+    float total=0;
+    int i;
+    for(i=0;i<n;i++)
+    {
+        if(strcmp(tab[i].ressource,"chauffage")==0)
+            total+=tab[i].valeur;
+    }
+    return total;
+}
+
+float calculerTotalEau(Mesure tab[], int n)
+{
+    float total=0;
+    int i;
+    for(i=0;i<n;i++)
+    {
+        if(strcmp(tab[i].ressource,"eau")==0)
+            total+=tab[i].valeur;
+    }
+    return total;
+}
