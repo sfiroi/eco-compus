@@ -157,9 +157,11 @@ void afficherEtoiles(int nombre) {
 int main() {
     Mesure tableau[100];
     int n, etoiles;
-
+    FILE *fjson=fopen("data.json","w");
+    fprintf(fjson, "[\n");
+    int vergule=0;
     n = conv("measures_in.csv", tableau, 100);
-
+    
     if (n == -1)
         return 1;
 
@@ -173,6 +175,23 @@ int main() {
     printf("Biblio - electricite - 2026 : ");
     afficherEtoiles(etoiles);
     printf("\n");
+    if(vergule == 1){
+            fprintf(fjson, ",\n");
+        }
+        fprintf(fjson,"{\n");
+        fprintf(fjson,"\"batiment\":\"%s\",\n", m.batiment);
+        fprintf(fjson,"\"ressource\":\"%s\",\n", m.ressource);
+        fprintf(fjson,"\"valeur\":%f,\n", m.valeur);
+        fprintf(fjson,"\"seuil\":%f,\n", m.seuil);
+        fprintf(fjson,"\"date\":\"%s\",\n", m.date);
+        fprintf(fjson,"\"alerte\":%s\n", m.alerte ? "true" : "false");
+        fprintf(fjson,"}"); // Na7hina el virgule l'm3aha
+        vergule = 1;
+    }
+
+    //i:taskir data
+    fprintf(fjson,"\n]\n");
+    fclose(fjson);
 
     return 0;
 }
@@ -319,4 +338,70 @@ int verifierMesure(Mesure m){
 		return 0;
 	}
 	return 1;
+}
+typedef struct {
+    char batiment[50];
+    char ressource[50];
+    float valeur;
+    float seuil;
+    char date[20];
+    bool alerte;
+} Mesure;
+
+Mesure max(Mesure t[],int n,char* bat,char* res) {
+    //T tableau fih les mesure,n taille mt3ou,bat esm batiment,res esm ressources//
+    float maxV=t[0].valeur;
+    //initialisation mte3 max//
+    char dt[20]="";
+    //chaine fiha date mt3 valeur maximal//
+    bool trv=false;
+    //tlwj 3l batiment w ressources ken l9inehm wle//
+    Mesure max = {"", "", 0, 0, "", false};
+
+    if(strcmp(t[0].batiment,bat)==0 && strcmp(t[0].ressource,res)==0) {
+        trv=true;
+        strcpy(dt,t[0].date);
+        max=t[0];
+    }
+    //ylwj 3l batiment w ressources li 7jtna behm//
+    for(int i=1;i<n;i++) {
+        if(strcmp(t[i].batiment,bat)==0 && strcmp(t[i].ressource,res)==0) {
+            //ylwj 3l batiment w ressources li 7jtna behm//
+            if(!trv || t[i].valeur>maxV) {
+                maxV=t[i].valeur;
+                strcpy(dt,t[i].date);
+                trv=true;
+                max = t[i];
+            }
+        }
+    }
+    return max;
+}
+
+Mesure min(Mesure t[],int n,char* bat,char* res) {
+    //T tableau fih les mesure,n taille mt3ou,bat esm batiment,res esm ressources//
+    float minV=t[0].valeur;
+    //initialisation mte3 min//
+    char dt[20]="";
+    //chaine fiha date mt3 valeur maximal//
+    bool trv=false;
+    //tlwj 3l batiment w ressources ken l9inehm wle//
+    Mesure min={"", "", 0, 0, "", false};
+    if(strcmp(t[0].batiment,bat)==0 && strcmp(t[0].ressource,res)==0) {
+        trv=true;
+        strcpy(dt,t[0].date);
+        min=t[0];
+    }
+    for(int i=1;i<n;i++) {
+        if(strcmp(t[i].batiment,bat)==0 && strcmp(t[i].ressource,res)==0) {
+            //ylwj 3l batiment w ressources li 7jtna behm//
+            if(!trv || t[i].valeur<minV) {
+                minV=t[i].valeur;
+                strcpy(dt,t[i].date);
+                trv=true;
+                min=t[i];
+            }
+        }
+    }
+    return min;
 }
