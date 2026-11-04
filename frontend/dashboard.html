@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EcoCampus - Tableau de Bord</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+<body>
+<div class="shell">
+  <div class="app">
+
+    <!-- ===== Sidebar ===== -->
+    <aside class="side" aria-label="Sidebar">
+      <div class="brand">EcoCampus</div>
+
+      <div class="user">
+        <div class="avatar" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor"><circle cx="16" cy="12" r="6"/><path d="M4 28c1-7 6-10 12-10s11 3 12 10z"/></svg>
+        </div>
+        <!-- This gets updated automatically by script.js from the database login -->
+        <span id="username">Utilisateur</span>
+      </div>
+
+      <nav class="nav" id="nav" aria-label="Main">
+        <ul>
+          <li><a href="dashboard.html" data-view="dashboard" aria-current="page">Dashboard</a></li>
+          <li><a href="notifications.html">Notifications</a></li>
+          <li><a href="chat.html">Assistant AI</a></li>
+          <li><a href="login.html">Déconnexion</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- ===== Main Area ===== -->
+    <main>
+      <div class="head">
+        <h1 id="title">Dashboard</h1>
+        <div class="meta">
+          <!-- Print / PDF Button with Printer Icon -->
+          <button type="button" class="theme" id="download-report" onclick="window.print()" aria-label="Imprimer ou enregistrer en PDF">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          </button>
+          <button type="button" class="theme" id="theme" aria-label="Changer de thème">⏾⋆.˚</button>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Gauges -->
+        <div class="col-12 col-lg-8">
+          <section class="card h-100">
+            <div class="card-head">
+              <div>
+                <h2>Objectifs cette année</h2>
+                <p class="sub">Les repères indiquent l'objectif 2026.</p>
+              </div>
+            </div>
+            <div class="gauges" id="gauges"></div>
+          </section>
+        </div>
+
+        <!-- Alerts -->
+        <div class="col-12 col-lg-4">
+          <section class="card h-100">
+            <div class="card-head">
+              <div>
+                <h2>Alertes</h2>
+                <p class="sub">7 derniers jours</p>
+              </div>
+              <span class="count" id="count"></span>
+            </div>
+            <button type="button" class="pill" id="readall">Tout marquer comme lu</button>
+            <ul class="alerts" id="alerts">
+              <li style="--c: var(--warn)"><span class="dot"></span><span>Science Hall : charge nocturne +12%</span><time>Lun</time></li>
+              <li style="--c: var(--good)"><span class="dot"></span><span>Réservoir d'eau de pluie rempli à 82%</span><time>Dim</time></li>
+              <li style="--c: var(--warn)"><span class="dot"></span><span>Bloc C : collecte des déchets retardée</span><time>Ven</time></li>
+            </ul>
+          </section>
+        </div>
+
+        <!-- Chart -->
+        <div class="col-12 col-lg-6">
+          <section class="card h-100">
+            <div class="card-head">
+              <div>
+                <h2>Tendance de consommation</h2>
+                <p class="sub">Indice, moyenne mensuelle 2025 = 100.</p>
+              </div>
+            </div>
+            <div class="chart-host" id="chart"></div>
+            <div class="toggles" id="toggles"></div>
+          </section>
+        </div>
+
+        <!-- Buildings Table -->
+        <div class="col-12 col-lg-6">
+          <section class="card h-100">
+            <div class="card-head">
+              <div>
+                <h2>Bâtiments</h2>
+                <p class="sub">Consommation électrique en Octobre.</p>
+              </div>
+            </div>
+            <div class="tbl-wrap">
+              <table>
+                <thead>
+                  <tr><th>Bâtiment</th><th>kWh/m²</th><th>Statut</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Bibliothèque</td><td class="num">14.2<small>−6%</small></td><td><span class="status" style="--c: var(--good)">Dans la cible</span></td></tr>
+                  <tr><td>Hall des Sciences</td><td class="num">31.8<small>+12%</small></td><td><span class="status" style="--c: var(--crit)">Au-dessus</span></td></tr>
+                  <tr><td>Résidence Étudiante</td><td class="num">19.5<small>−2%</small></td><td><span class="status" style="--c: var(--good)">Dans la cible</span></td></tr>
+                  <tr><td>Centre Sportif</td><td class="num">22.1<small>+4%</small></td><td><span class="status" style="--c: var(--warn)">À surveiller</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<script src="assets/js/script.js"></script>
+</body>
+</html>

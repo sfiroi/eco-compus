@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fr" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EcoCampus - Notifications</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+  <style>
+    /* Styles spécifiques pour la page des notifications */
+    .notif-wrap { width: 100%; max-width: 800px; margin: 0 auto; }
+    .notifs-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+    .notif-item {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+      padding: 18px 20px; background: color-mix(in srgb, var(--surface) 88%, transparent);
+      border: 1px solid var(--line); border-radius: 20px; transition: opacity 0.2s;
+    }
+    .notif-item.read { opacity: 0.6; }
+    .notif-content { display: flex; gap: 14px; align-items: flex-start; }
+    .notif-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c, var(--accent)); margin-top: 6px; flex-shrink: 0; }
+    .notif-text h3 { margin: 0 0 4px; font: 600 15px/1.3 var(--f-display); color: var(--ink); }
+    .notif-text p { margin: 0; font-size: 13px; color: var(--muted); }
+    .notif-time { font: 400 12px var(--f-mono); color: var(--muted); white-space: nowrap; }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <div class="app">
+
+    <!-- ===== Sidebar ===== -->
+    <aside class="side" aria-label="Sidebar">
+      <div class="brand">EcoCampus</div>
+
+      <div class="user">
+        <div class="avatar" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor"><circle cx="16" cy="12" r="6"/><path d="M4 28c1-7 6-10 12-10s11 3 12 10z"/></svg>
+        </div>
+        <span id="username">Utilisateur</span>
+      </div>
+
+      <nav class="nav" id="nav" aria-label="Main">
+        <ul>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="notifications.html" aria-current="page">Notifications</a></li>
+          <li><a href="chat.html">Assistant AI</a></li>
+          <li><a href="login.html">Déconnexion</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- ===== Main Area ===== -->
+    <main>
+      <div class="head">
+        <h1 id="title">Notifications</h1>
+        <div class="meta">
+          <button type="button" class="theme" id="theme" aria-label="Changer de thème">⏾⋆.˚</button>
+        </div>
+      </div>
+
+      <div class="notif-wrap">
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>Centre de notifications</h2>
+              <p class="sub">Historique des alertes et des événements récents du campus.</p>
+            </div>
+            <button type="button" class="btn-soft" id="mark-all-read">Tout marquer comme lu</button>
+          </div>
+
+          <div class="notifs-list" id="notifications-container">
+            <div class="notif-item" style="--c: var(--crit);">
+              <div class="notif-content">
+                <span class="notif-dot"></span>
+                <div class="notif-text">
+                  <h3>Hall des Sciences : Pic de charge nocturne</h3>
+                  <p>Une augmentation anormale de +12% de la consommation a été détectée cette nuit.</p>
+                </div>
+              </div>
+              <span class="notif-time">Il y a 2h</span>
+            </div>
+
+            <div class="notif-item" style="--c: var(--good);">
+              <div class="notif-content">
+                <span class="notif-dot"></span>
+                <div class="notif-text">
+                  <h3>Réservoir d'eau de pluie</h3>
+                  <p>Le réservoir principal du bloc central a atteint 82% de sa capacité.</p>
+                </div>
+              </div>
+              <span class="notif-time">Hier</span>
+            </div>
+
+            <div class="notif-item" style="--c: var(--warn);">
+              <div class="notif-content">
+                <span class="notif-dot"></span>
+                <div class="notif-text">
+                  <h3>Bloc C : Collecte des déchets</h3>
+                  <p>Le ramassage prévu ce matin a été reporté en raison d'un retard logistique.</p>
+                </div>
+              </div>
+              <span class="notif-time">Il y a 3 jours</span>
+            </div>
+
+            <div class="notif-item" style="--c: var(--accent);">
+              <div class="notif-content">
+                <span class="notif-dot"></span>
+                <div class="notif-text">
+                  <h3>Objectif 2026 mis à jour</h3>
+                  <p>Les nouveaux indicateurs d'efficacité énergétique ont été validés par l'administration.</p>
+                </div>
+              </div>
+              <span class="notif-time">Il y a 5 jours</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<script src="assets/js/notifications.js"></script>
+</body>
+</html>
