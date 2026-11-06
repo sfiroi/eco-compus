@@ -1,4 +1,5 @@
-/* Traduction FR / AR / EN : attributs data-i18n, data-i18n-placeholder, data-i18n-aria */
+/* Traduction FR / AR / EN : attributs data-i18n, data-i18n-placeholder, data-i18n-aria
+   Boutons de langue : <button data-lang="fr|ar|en"> dans #translation-menu */
 const TRADUCTIONS = {
  "fr": {
   "translation": "Traduction",
@@ -14,7 +15,7 @@ const TRADUCTIONS = {
   "trend": "Tendance de consommation",
   "trend_sub": "Indice, moyenne mensuelle 2025 = 100.",
   "bld": "Bâtiments",
-  "bld_sub": "Consommation électrique en Octobre.",
+  "bld_sub": "Consommation électrique en octobre.",
   "th_bld": "Bâtiment",
   "th_status": "Statut",
   "b1": "Bibliothèque",
@@ -24,7 +25,7 @@ const TRADUCTIONS = {
   "s_ok": "Dans la cible",
   "s_hi": "Au-dessus",
   "s_warn": "À surveiller",
-  "a1": "Science Hall : charge nocturne +12%",
+  "a1": "Hall des Sciences : charge nocturne +12%",
   "a2": "Réservoir d'eau de pluie rempli à 82%",
   "a3": "Bloc C : collecte des déchets retardée",
   "d1": "Lun",
@@ -34,8 +35,8 @@ const TRADUCTIONS = {
   "unread": "Tout marquer comme non lu",
   "new_n": "{n} nouveaux",
   "all_read": "Tous lus",
-  "m_title": "Mesures",
-  "m_sub": "Données générées par le module C (data.json).",
+  "m_title": "Mesures de consommation",
+  "m_sub_data": "Données générées par le module C (data.json).",
   "search_ph": "Rechercher un bâtiment ou une ressource...",
   "all_res": "Toutes les ressources",
   "electricite": "Électricité",
@@ -50,7 +51,7 @@ const TRADUCTIONS = {
   "th_date": "Date",
   "st_alert": "Alerte",
   "st_norm": "Normal",
-  "none": "Aucun résultat",
+  "none_results": "Aucun résultat",
   "err": "Impossible de charger data.json. Lancez un serveur local (Live Server).",
   "count": "{n} / {t} mesure(s)",
   "nc_title": "Centre de notifications",
@@ -148,7 +149,7 @@ const TRADUCTIONS = {
   "new_n": "{n} جديدة",
   "all_read": "الكل مقروء",
   "m_title": "قياسات الاستهلاك",
-  "m_sub": "بيانات من وحدة C (data.json).",
+  "m_sub_data": "بيانات من وحدة C (data.json).",
   "search_ph": "ابحث عن مبنى أو مورد...",
   "all_res": "كل الموارد",
   "electricite": "الكهرباء",
@@ -162,7 +163,7 @@ const TRADUCTIONS = {
   "th_date": "التاريخ",
   "st_alert": "تنبيه",
   "st_norm": "عادي",
-  "none": "لا توجد نتائج",
+  "none_results": "لا توجد نتائج",
   "captcha_txt": "كم تساوي {a} + {b}؟",
   "err": "تعذّر تحميل data.json. شغّل خادمًا محليًا (Live Server).",
   "count": "{n} / {t} قياس",
@@ -262,7 +263,7 @@ const TRADUCTIONS = {
   "new_n": "{n} new",
   "all_read": "All read",
   "m_title": "Consumption measures",
-  "m_sub": "Data from the C module (data.json).",
+  "m_sub_data": "Data from the C module (data.json).",
   "search_ph": "Search a building or resource...",
   "all_res": "All resources",
   "electricite": "Electricity",
@@ -276,7 +277,7 @@ const TRADUCTIONS = {
   "th_date": "Date",
   "st_alert": "Alert",
   "st_norm": "Normal",
-  "none": "No results",
+  "none_results": "No results",
   "err": "Unable to load data.json. Start a local server (Live Server).",
   "count": "{n} / {t} measures",
   "nc_title": "Notification center",
@@ -347,11 +348,11 @@ try { const m = localStorage.getItem("langue"); if (TRADUCTIONS[m]) langue = m; 
 /* Texte dans la langue courante ; {n} {t} = paramètres ; repli : français puis clé */
 function t(cle, p) {
   let s = (TRADUCTIONS[langue] && TRADUCTIONS[langue][cle]) || TRADUCTIONS.fr[cle] || cle;
-  if (p) Object.keys(p).forEach(k => { s = s.replace("{" + k + "}", p[k]); });
+  if (p) Object.keys(p).forEach(k => { s = s.split("{" + k + "}").join(p[k]); });
   return s;
 }
 
-// Dictionnaire avec les noms d'affichage des langues
+// Noms d'affichage des langues (bouton)
 const NOMS_LANGUES = {
   "fr": "Français",
   "ar": "العربية",
@@ -361,47 +362,148 @@ const NOMS_LANGUES = {
 function appliquerTraductions() {
   let nom = null;
   try { nom = localStorage.getItem("username"); } catch (e) {}
-  
+
   document.querySelectorAll("[data-i18n]").forEach(el => {
     if (el.id === "username" && nom) return;
-    if (el.id === "translation-btn") return; 
+    if (el.id === "translation-btn") return;
     el.textContent = t(el.dataset.i18n);
   });
-  
+
   document.querySelectorAll("[data-i18n-placeholder]").forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
   document.querySelectorAll("[data-i18n-aria]").forEach(el => { el.setAttribute("aria-label", t(el.dataset.i18nAria)); });
   document.documentElement.lang = langue;
   document.documentElement.dir = langue === "ar" ? "rtl" : "ltr";
 
   const btn = document.getElementById("translation-btn");
-  if (btn) {
-    btn.textContent = NOMS_LANGUES[langue] || "Français";
-  }
+  if (btn) btn.textContent = NOMS_LANGUES[langue] || "Français";
 }
 
 function changerLangue(l) {
   if (!TRADUCTIONS[l]) return;
   langue = l;
   try { localStorage.setItem("langue", l); } catch (e) {}
+  arreterParole();   // stoppe la lecture en cours (mauvaise langue sinon)
   appliquerTraductions();
   if (typeof window.actualiserMesures === "function") window.actualiserMesures();
-  
-  // Régénère le captcha dans la nouvelle langue instantanément
-  if (typeof genererCaptcha === "function") {
-    genererCaptcha();
-  }
-  
+  if (typeof window.genererCaptcha === "function") window.genererCaptcha();
+
   const menu = document.getElementById("translation-menu");
   if (menu) menu.classList.remove("active");
 }
 
-if (typeof document !== "undefined") {
+/* ==========================================================
+   SYNTHÈSE VOCALE (suit automatiquement la langue de la page)
+   ========================================================== */
+
+const synth = (typeof window !== "undefined") ? window.speechSynthesis : null;
+let voix = [];
+
+// Langues de la page -> locales de la synthèse vocale
+const LOCALES_VOIX = {
+  fr: "fr-FR",
+  ar: "ar-SA",   // arabe standard : les voix tunisiennes (ar-TN) sont très rares
+  en: "en-US"
+};
+
+function chargerVoix() {
+  if (synth) voix = synth.getVoices();
+}
+
+function choisirVoix(locale) {
+  const norm = l => l.replace("_", "-").toLowerCase();   // Android écrit en_US
+  const voulu = norm(locale);
+  const base = voulu.split("-")[0];
+  return voix.find(v => norm(v.lang) === voulu)          // correspondance exacte (fr-fr)
+      || voix.find(v => norm(v.lang).startsWith(base))   // même langue (fr-ca, ar-eg...)
+      || null;                                           // sinon : voix par défaut
+}
+
+/* Lit un texte dans la langue courante de la page */
+function parler(texte) {
+  if (!synth || !texte) return;
+  synth.cancel();                                        // évite les chevauchements
+
+  const lang = document.documentElement.lang || "fr";
+  const locale = LOCALES_VOIX[lang] || "fr-FR";
+
+  const u = new SpeechSynthesisUtterance(texte);
+  u.lang = locale;
+
+  const v = choisirVoix(locale);
+  if (v) u.voice = v;
+  else console.warn("Aucune voix installée pour " + locale);
+
+  synth.speak(u);
+  return u;
+}
+
+/* Lit le texte d'un élément (ex : parlerElement("#a1")) */
+function parlerElement(selecteur) {
+  const el = document.querySelector(selecteur);
+  if (el) parler((el.innerText || el.textContent).trim());
+}
+
+/* Lit une clé de traduction (ex : parlerCle("goals")) */
+function parlerCle(cle, params) {
+  parler(t(cle, params));
+}
+
+function arreterParole() {
+  if (synth) synth.cancel();
+  const b = document.getElementById("btnLire");
+  if (b) b.textContent = "🕪";
+}
+
+if (synth) {
+  chargerVoix();
+  synth.onvoiceschanged = chargerVoix;   // Chrome charge les voix de façon asynchrone
+}
+
+/* ==========================================================
+   INITIALISATION
+   ========================================================== */
+
+function initTraductions() {
   appliquerTraductions();
-  const btn = document.getElementById("translation-btn"), menu = document.getElementById("translation-menu");
+
+  const btn = document.getElementById("translation-btn");
+  const menu = document.getElementById("translation-menu");
+
+  // Bouton principal : ouvre / ferme le menu
   if (btn && menu) {
     btn.addEventListener("click", e => { e.stopPropagation(); menu.classList.toggle("active"); });
     document.addEventListener("click", () => menu.classList.remove("active"));
     document.addEventListener("keydown", e => { if (e.key === "Escape") menu.classList.remove("active"); });
   }
+
+  // Boutons de langue : <button data-lang="fr|ar|en">
+  document.querySelectorAll("[data-lang]").forEach(el => {
+    el.addEventListener("click", e => {
+      e.stopPropagation();
+      changerLangue(el.dataset.lang);
+    });
+  });
+
+  // Bouton de lecture vocale : #btnLire
+  const btnLire = document.getElementById("btnLire");
+  if (btnLire && synth) {
+    btnLire.addEventListener("click", () => {
+      if (synth.speaking) { arreterParole(); return; }
+
+      const zone = document.querySelector("main") || document.body;
+      const u = parler(zone.innerText.trim());
+      btnLire.textContent = "⏹";
+      if (u) u.onend = u.onerror = () => { btnLire.textContent = "🕪"; };
+    });
+  }
 }
+
+if (typeof document !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTraductions);
+  } else {
+    initTraductions();
+  }
+}
+
 if (typeof module !== "undefined") module.exports = { TRADUCTIONS, t };

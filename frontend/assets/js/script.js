@@ -255,11 +255,6 @@ const SERIES = RESOURCE_CONFIG.map(config => {
   /* =========================================================
      2. USER PROFILE SYNCHRONIZATION
      ========================================================= */
-<<<<<<< HEAD
-=======
-  /* 2. USER PROFILE SYNCHRONIZATION */
-
->>>>>>> 426957821e7782e32e9f0e08cdaf211aa23d4cfb
 try {
     // Récupérer le nom envoyé depuis PHP
     const params = new URLSearchParams(window.location.search);
