@@ -42,4 +42,3 @@ id,batiment,ressource,valeur,seuil,date,alerte
 42,Biblio,electricite,19.0,200.0,06/28/2026,false
 43,Resto,eau,380.0,500.0,08/16/2026,false
 44,Amphi A,electricite,240.0,250.0,12/27/2026,false
-45,Laboratoire,eau,600.0,550.0,12/29/2026,true

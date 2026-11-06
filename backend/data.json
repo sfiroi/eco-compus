@@ -385,14 +385,5 @@
     "seuil": 250.0,
     "date": "12/27/2026",
     "alerte": false
-  },
-  {
-    "id": 45,
-    "batiment": "Laboratoire",
-    "ressource": "eau",
-    "valeur": 600.0,
-    "seuil": 550.0,
-    "date": "12/29/2026",
-    "alerte": true
   }
 ]
