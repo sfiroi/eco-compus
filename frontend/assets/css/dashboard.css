@@ -366,3 +366,14 @@ td.num small { margin-left: 6px; color: var(--muted); font-weight: 400; }
     background: var(--line);
     border-radius: 10px;
 }
+.sidebar {
+    height: calc(100vh - 28px) !important;
+    min-height: 0 !important;
+    max-height: calc(100vh - 28px);
+    flex-shrink: 0;
+    align-self: flex-start;
+    position: sticky;
+    top: 14px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

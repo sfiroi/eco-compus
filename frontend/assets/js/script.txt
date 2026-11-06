@@ -1,0 +1,63 @@
+
+// ======================================
+// RECHERCHE
+// ======================================
+
+document.getElementById("search")
+    .addEventListener("input", appliquerFiltres);
+
+
+// ======================================
+// FILTRE RESSOURCE
+// ======================================
+
+document.getElementById("ressourceFilter")
+    .addEventListener("change", appliquerFiltres);
+
+
+// ======================================
+// FILTRES COMBINÉS
+// ======================================
+
+function appliquerFiltres() {
+
+    const recherche = document.getElementById("search")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const ressource = document.getElementById("ressourceFilter")
+        .value;
+
+    const resultat = mesures.filter(mesure => {
+
+        const correspondBatiment =
+            mesure.batiment.toLowerCase().includes(recherche);
+
+        const correspondRessource =
+            ressource === "" ||
+            mesure.ressource === ressource;
+
+        return correspondBatiment && correspondRessource;
+
+    });
+
+    afficherDashboard(resultat);
+}
+
+
+// ======================================
+// RESET
+// ======================================
+
+document.getElementById("reset")
+    .addEventListener("click", function() {
+
+        document.getElementById("search").value = "";
+
+        document.getElementById("ressourceFilter").value = "";
+
+        afficherDashboard(mesures);
+
+    });
+

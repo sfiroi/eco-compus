@@ -4,56 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoCampus - Connexion</title>
+    <!-- Styles spécifiques pour la page de connexion -->
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-    <div class="container">
+    <div class="container" style="position: relative;">
+        <!-- Menu déroulant de traduction pour la page de connexion -->
+        <div style="position: absolute; top: 20px; right: 20px; z-index: 10;">
+          <div style="position: relative; display: inline-block;">
+            <button type="button" class="theme" id="translation-btn">Français</button>
+            <div id="translation-menu" class="dropdown-menu" style="position: absolute; right: 0; top: 100%; display: none; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000;">
+              <button type="button" onclick="changerLangue('fr')" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 6px 12px; color: var(--ink); cursor: pointer; border-radius: 4px;">Français</button>
+              <button type="button" onclick="changerLangue('ar')" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 6px 12px; color: var(--ink); cursor: pointer; border-radius: 4px;">العربية</button>
+              <button type="button" onclick="changerLangue('en')" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 6px 12px; color: var(--ink); cursor: pointer; border-radius: 4px;">English</button>
+            </div>
+          </div>
+        </div>
 
-        <!-- Côté gauche : Visuel avec image d'arrière-plan -->
+        <!-- =========================================================
+           CÔTÉ GAUCHE : Visuel & Image de marque EcoCampus
+           ========================================================= -->
         <div class="visual-side">
             <div class="brand">
                 <img src="images/logo.png" alt="Logo EcoCampus">
             </div>
 
             <div class="welcome">
-                <span class="tagline">UN CAMPUS PLUS VERT COMMENCE ICI</span>
-                <h1>Chaque goutte et chaque watt comptent.</h1>
-                <p>Une gestion intelligente des ressources pour un campus plus durable.</p>
+                <span class="tagline" data-i18n="lg_tag">UN CAMPUS PLUS VERT COMMENCE ICI</span>
+                <h1 data-i18n="lg_h1">Chaque goutte et chaque watt comptent.</h1>
+                <p data-i18n="lg_p">Une gestion intelligente des ressources pour un campus plus durable.</p>
             </div>
 
             <div class="footer-text">
-                <p>Suivre. Réduire. Agir pour l'impact.</p>
+                <p data-i18n="lg_foot">Suivre. Réduire. Agir pour l'impact.</p>
             </div>
         </div>
 
-        <!-- Côté droit : Formulaire -->
+        <!-- =========================================================
+           CÔTÉ DROIT : Formulaire de connexion & CAPTCHA
+           ========================================================= -->
         <div class="login-side">
             <div class="login-box">
-                <span class="welcome-badge">BON RETOUR</span>
-                <h2>Connexion</h2>
-                <p class="subtitle">Entrez vos identifiants pour continuer.</p>
+                <span class="welcome-badge" data-i18n="lg_badge">BON RETOUR</span>
+                <h2 data-i18n="lg_h2">Connexion</h2>
+                <p class="subtitle" data-i18n="lg_sub">Entrez vos identifiants pour continuer.</p>
 
-                <form method="POST" action="../backend/login.php">
+                <!-- Formulaire de soumission POST vers le backend PHP -->
+                <form method="POST" action="http://localhost/EcoCampus/backend/login.php">
 
                     <div class="form-group">
-                        <label for="email">Adresse e-mail</label>
+                        <label for="email" data-i18n="lg_email">Adresse e-mail</label>
                         <input type="email" id="email" name="email" placeholder="tu@exemple.com" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="password">Mot de passe</label>
-                        <input type="password" id="password" name="password" placeholder="Votre mot de passe" required>
+                        <label for="password" data-i18n="lg_pass">Mot de passe</label>
+                        <input type="password" id="password" name="password" placeholder="Votre mot de passe" data-i18n-placeholder="lg_pass_ph" required>
                     </div>
 
-                    <!-- CAPTCHA JS -->
+                    <!-- Module de validation CAPTCHA dynamique (généré par captcha.js) -->
                     <div class="form-group">
                         <label id="captchaLabel" for="captcha">Combien font X + Y ?</label>
-                        <input type="number" id="captcha" name="captcha" placeholder="Votre réponse" required>
+                        <input type="number" id="captcha" name="captcha" placeholder="Votre réponse" data-i18n-placeholder="lg_cap_ph" required>
                         <input type="hidden" id="captchaCorrect" name="captchaCorrect">
                     </div>
 
-                    <button type="submit" name="login">Se connecter &rarr;</button>
+                    <button type="submit" name="login" data-i18n="lg_btn">Se connecter &rarr;</button>
 
                 </form>
 
@@ -63,8 +80,22 @@
 
     </div>
 
-    <!-- Script de génération du CAPTCHA -->
+    <!-- Script d'affichage du menu déroulant de traduction -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const m = document.getElementById("translation-menu");
+        if(m) {
+          const observer = new MutationObserver(() => {
+            if(m.classList.contains("active")) m.style.display = "block";
+            else m.style.display = "none";
+          });
+          observer.observe(m, { attributes: true, attributeFilter: ["class"] });
+        }
+      });
+    </script>
+    <!-- Script de génération et vérification du CAPTCHA -->
     <script src="assets/js/captcha.js"></script>
+    <script src="assets/js/i18n.js" defer></script>
 
 </body>
 </html>
