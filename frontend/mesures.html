@@ -81,27 +81,43 @@
       </div>
 
       <!-- Sous-titre indicatif des fonctionnalités de la page -->
-      <p class="sub mb-4" style="margin-top: -10px;">1 Afficher · 3 Anomalies · 4 Trier · 5 Rechercher · 14 Supprimer</p>
+      <p class="sub mb-4" style="margin-top: -10px;" data-i18n="m_subtitle">Affichage · Anomalies · Tri · Recherche · Filtre</p>
 
       <!-- Section du tableau et des contrôles de filtrage -->
       <section class="card">
         <div class="card-head flex-wrap gap-2">
           <!-- Barre de recherche textuelle -->
-          <input id="q" class="form-control w-auto flex-grow-1" placeholder="Rechercher..." data-i18n-placeholder="search_ph">
-          <!-- Sélecteur de type de tri -->
-          <select id="sortType" class="form-select w-auto">
-            <option value="valeur">Tri : Valeur croissante</option>
-            <option value="id">Tri : ID croissant</option>
-            <option value="id_desc">Tri : ID décroissant</option>
+          <input id="q" class="form-control w-auto flex-grow-1" type="search" placeholder="Rechercher un bâtiment ou une ressource..." data-i18n-placeholder="search_ph" aria-label="Search">
+          
+          <!-- Filtre par type de ressource -->
+          <select id="resourceFilter" class="form-select w-auto" aria-label="Filter by resource">
+            <option value="all" data-i18n="all_res">Toutes les ressources</option>
+            <option value="electricite" data-i18n="resource_electricite">Électricité</option>
+            <option value="eau" data-i18n="resource_eau">Eau</option>
+            <option value="chauffage" data-i18n="resource_chauffage">Chauffage</option>
           </select>
-          <!-- Boutons d'action (Trier & Anomalies) -->
+
+          <!-- Sélecteur de type de tri -->
+          <select id="sortType" class="form-select w-auto" aria-label="Sort measurements">
+            <option value="valeur" data-i18n="sort_value">Valeur croissante</option>
+            <option value="id" data-i18n="sort_id">ID croissant</option>
+            <option value="id_desc" data-i18n="sort_id_desc">ID décroissant</option>
+          </select>
+
+          <!-- Boutons d'action -->
           <button id="sort" class="btn btn-outline-secondary btn-sm" data-i18n="trier">Trier</button>
-          <button id="anom" class="btn btn-outline-danger btn-sm" data-i18n="only_alerts">Anomalies</button>
+          <button id="anom" class="btn btn-outline-danger btn-sm" data-i18n="only_alerts">Anomalies seulement</button>
+          <button id="resetFilters" class="btn btn-outline-secondary btn-sm" data-i18n="reset">Réinitialiser</button>
         </div>
 
         <!-- Tableau dynamique des données -->
+<<<<<<< HEAD
+        <div class="tbl-wrap mesures-table-wrap p-3">
+          <table class="table align-middle mesures-table">
+=======
         <div class="tbl-wrap p-3">
           <table class="table align-middle">
+>>>>>>> 426957821e7782e32e9f0e08cdaf211aa23d4cfb
             <thead>
               <tr>
                 <th>ID</th>
@@ -117,6 +133,9 @@
             <tbody id="tb"></tbody>
           </table>
         </div>
+        
+        <!-- Indicateur du nombre de mesures affichées -->
+        <div class="px-3 pb-3 small text-muted" id="measure-count" aria-live="polite"></div>
       </section>
 
       <!-- Conteneur de messages de notification / retour -->
@@ -138,8 +157,9 @@
     }
   });
 </script>
-<!-- Script logique de la page des mesures -->
-<script src="assets/js/mesures.js"></script>
+
+<!-- Scripts logiques de l'application -->
 <script src="assets/js/i18n.js" defer></script>
+<script src="assets/js/mesures.js" defer></script>
 </body>
 </html>
