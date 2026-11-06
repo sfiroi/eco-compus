@@ -121,11 +121,46 @@ afficherAlertes(mesures);
   /* =========================================================
      1. CONFIGURATION DATA (Gauges & Trend Chart)
      ========================================================= */
-  const GAUGES = [
-    { name: 'Taux de recyclage',   value: 64, target: 70 },
-    { name: 'Énergie renouvelable', value: 48, target: 60 },
-    { name: 'Eau réutilisée',     value: 31, target: 40 },
-  ];
+  // Calcul automatique des objectifs depuis les mesures
+const GAUGES = [
+    {
+        name: 'Électricité',
+        resource: 'electricite',
+        target: 100
+    },
+    {
+        name: 'Eau',
+        resource: 'eau',
+        target: 100
+    },
+    {
+        name: 'Chauffage',
+        resource: 'chauffage',
+        target: 100
+    }
+].map(g => {
+
+    // Récupérer les mesures de cette ressource
+    const mesuresRessource = mesures.filter(
+        m => m.ressource === g.resource
+    );
+
+    // Compter les mesures qui respectent le seuil
+    const conformes = mesuresRessource.filter(
+        m => Number(m.valeur) <= Number(m.seuil)
+    ).length;
+
+    // Calculer le pourcentage
+    const pourcentage = mesuresRessource.length > 0
+        ? Math.round((conformes / mesuresRessource.length) * 100)
+        : 0;
+
+    return {
+        name: g.name,
+        value: pourcentage,
+        target: g.target
+    };
+});
 
   /* =========================================================
    DYNAMIC CHART DATA FROM FLASK API
@@ -220,14 +255,35 @@ const SERIES = RESOURCE_CONFIG.map(config => {
   /* =========================================================
      2. USER PROFILE SYNCHRONIZATION
      ========================================================= */
-  try {
-    const savedName = localStorage.getItem('username');
-    if (savedName && $('#username')) {
-      $('#username').textContent = savedName;
+  /* 2. USER PROFILE SYNCHRONIZATION */
+
+try {
+    // Récupérer le nom envoyé depuis PHP
+    const params = new URLSearchParams(window.location.search);
+    const usernameFromLogin = params.get('username');
+
+    // Mettre à jour le nom sauvegardé
+    if (usernameFromLogin) {
+        localStorage.setItem('username', usernameFromLogin);
+
+        // Nettoyer l'URL
+        window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+        );
     }
-  } catch (e) {
-    console.warn("Could not retrieve username:", e);
-  }
+
+    // Afficher le nom actuel
+    const savedName = localStorage.getItem('username');
+
+    if (savedName && $('#username')) {
+        $('#username').textContent = savedName;
+    }
+
+} catch (e) {
+    console.error("Erreur de synchronisation du profil :", e);
+}
 
   /* =========================================================
      3. SVG GAUGES RENDERING & ANIMATION

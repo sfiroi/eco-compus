@@ -34,7 +34,7 @@ const TRADUCTIONS = {
   "unread": "Tout marquer comme non lu",
   "new_n": "{n} nouveaux",
   "all_read": "Tous lus",
-  "m_title": "Mesures de consommation",
+  "m_title": "Mesures",
   "m_sub": "Données générées par le module C (data.json).",
   "search_ph": "Rechercher un bâtiment ou une ressource...",
   "all_res": "Toutes les ressources",

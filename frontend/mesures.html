@@ -9,6 +9,24 @@
   <!-- Styles personnalisés du thème EcoCampus -->
   <link rel="stylesheet" href="assets/css/dashboard.css">
 </head>
+<style>
+   
+    .tbl-wrap {
+        height: 650px !important;
+        max-height: 650px !important;
+        overflow-y: auto !important;
+        overflow-x: auto !important;
+        width: 100%;
+    }
+
+    
+    .tbl-wrap table tbody tr {
+        height: 55px;
+    }
+
+    
+    
+</style>
 <body>
 <div class="shell">
   <div class="app">
@@ -82,8 +100,8 @@
         </div>
 
         <!-- Tableau dynamique des données -->
-        <div class="tbl-wrap mesures-table-wrap">
-          <table class="table align-middle mesures-table">
+        <div class="tbl-wrap p-3">
+          <table class="table align-middle">
             <thead>
               <tr>
                 <th>ID</th>
