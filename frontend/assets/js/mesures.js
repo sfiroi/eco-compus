@@ -10,7 +10,6 @@
   let mesures = [];
   let afficherAnomalies = false;
 
-  // Dictionnaire des bâtiments (hérité de mesures.js)
   const nomsBatiments = {
     "biblio": { fr: "Biblio", ar: "المكتبة", en: "Library" },
     "bibliotheque annexe": { fr: "Bibliothèque annexe", ar: "المكتبة الفرعية", en: "Annex Library" },
@@ -58,7 +57,6 @@
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .toLocaleLowerCase();
 
-  // Configuration du nom d'utilisateur et du thème (provenant de mesures_2.js)
   try {
     const savedName = localStorage.getItem('username');
     if (savedName && $('#username')) $('#username').textContent = savedName;
@@ -77,7 +75,6 @@
   }
   setTheme(localStorage.getItem('theme') || 'light');
 
-  // Helper API Flask
   async function api(url, options) {
     try {
       const res = await fetch(url, options);
@@ -99,11 +96,30 @@
     }
   }
 
-  // Logique de filtrage et tri combinée (Frontend + Internationalisation)
+  // Fonction pour exécuter le tri via le Backend Python/C (Flask)
+  async function executerTriBackend() {
+    const typeTri = document.getElementById("sortType")?.value || "valeur";
+    let endpoint = '/api/sort'; // par défaut valeur croissante
+
+    if (typeTri === "id") {
+      endpoint = '/api/sort-id';
+    } else if (typeTri === "id_desc") {
+      endpoint = '/api/sort-id-desc';
+    }
+
+    const res = await api(endpoint, { method: 'POST' });
+    if (Array.isArray(res)) {
+      mesures = res;
+      afficherMesures();
+    } else {
+      // Si le backend renvoie une erreur ou format inattendu, on recharge les données normales
+      await chargerDonnees();
+    }
+  }
+
   function obtenirMesuresFiltrees() {
     const recherche = normaliser(document.getElementById("q")?.value || "");
     const ressourceFilter = document.getElementById("resourceFilter")?.value || "all";
-    const typeTri = document.getElementById("sortType")?.value || "valeur";
 
     let resultat = mesures.filter(m => {
       const batimentTraduit = texteBatiment(m.batiment);
@@ -123,14 +139,9 @@
       return correspondRecherche && correspondRessource && correspondAnomalie;
     });
 
-    if (typeTri === "id") resultat.sort((a, b) => a.id - b.id);
-    else if (typeTri === "id_desc") resultat.sort((a, b) => b.id - a.id);
-    else resultat.sort((a, b) => a.valeur - b.valeur);
-
     return resultat;
   }
 
-  // Affichage du tableau et mise à jour du compteur
   function afficherMesures() {
     const tbody = document.getElementById("tb");
     if (!tbody) return;
@@ -170,7 +181,6 @@
     }[c]));
   }
 
-  // Suppression connectée à l'API Flask
   window.deleteMeasure = async (id) => {
     if (!confirm(traduire("confirm_delete"))) return;
     const res = await api('/api/measure/' + id, { method: 'DELETE' });
@@ -185,15 +195,25 @@
     }
   };
 
-  // Écouteurs d'événements
   document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("q")?.addEventListener("input", afficherMesures);
     document.getElementById("resourceFilter")?.addEventListener("change", afficherMesures);
-    document.getElementById("sortType")?.addEventListener("change", afficherMesures);
+    
+    // Changement du type de tri ou clic sur le bouton Trier -> Appel au backend Python/C
+    document.getElementById("sortType")?.addEventListener("change", executerTriBackend);
 
     const btnSort = $('#sort');
     if (btnSort) {
-      btnSort.addEventListener("click", afficherMesures);
+      btnSort.addEventListener("click", executerTriHeader);
+    }
+
+    async function executerTriHeader() {
+      await executerTriBackend();
+      const msg = $('#msg');
+      if(msg) {
+        msg.innerHTML = '<div class="alert alert-success py-1 mb-2">Tri effectué avec succès via le backend.</div>';
+        setTimeout(() => { msg.innerHTML = ''; }, 3000);
+      }
     }
 
     const btnAnom = $('#anom');
@@ -205,21 +225,8 @@
       });
     }
 
-    const btnReset = $('#resetFilters');
-    if (btnReset) {
-      btnReset.addEventListener('click', () => {
-        if ($("#q")) $("#q").value = "";
-        if ($("#resourceFilter")) $("#resourceFilter").value = "all";
-        if ($("#sortType")) $("#sortType").value = "valeur";
-        afficherAnomalies = false;
-        if ($("#anom")) $("#anom").classList.remove("active");
-        afficherMesures();
-      });
-    }
-
     chargerDonnees();
   });
 
-  // Support externe pour le changement de langue
   window.actualiserMesures = afficherMesures;
 })();

@@ -123,43 +123,40 @@ afficherAlertes(mesures);
      ========================================================= */
   // Calcul automatique des objectifs depuis les mesures
 const GAUGES = [
-    {
-        name: 'Électricité',
-        resource: 'electricite',
-        target: 100
-    },
-    {
-        name: 'Eau',
-        resource: 'eau',
-        target: 100
-    },
-    {
-        name: 'Chauffage',
-        resource: 'chauffage',
-        target: 100
-    }
-].map(g => {
+      {
+          name: 'Électricité',
+          resource: 'electricite'
+      },
+      {
+          name: 'Eau',
+          resource: 'eau'
+      },
+      {
+          name: 'Chauffage',
+          resource: 'chauffage'
+      }
+  ].map(g => {
+      // Récupérer les mesures de cette ressource
+      const mesuresRessource = mesures.filter(
+          m => m.ressource === g.resource
+      );
 
-    // Récupérer les mesures de cette ressource
-    const mesuresRessource = mesures.filter(
-        m => m.ressource === g.resource
-    );
+      // Compter les mesures qui respectent le seuil
+      const conformes = mesuresRessource.filter(
+          m => Number(m.valeur) <= Number(m.seuil)
+      ).length;
 
-    // Compter les mesures qui respectent le seuil
-    const conformes = mesuresRessource.filter(
-        m => Number(m.valeur) <= Number(m.seuil)
-    ).length;
+      // Calculer le pourcentage actuel
+      const pourcentage = mesuresRessource.length > 0
+          ? Math.round((conformes / mesuresRessource.length) * 100)
+          : 0;
 
-    // Calculer le pourcentage
-    const pourcentage = mesuresRessource.length > 0
-        ? Math.round((conformes / mesuresRessource.length) * 100)
-        : 0;
-
-    return {
-        name: g.name,
-        value: pourcentage,
-        target: g.target
-    };
+      // El target twalli ttbaddal w tkon m3a el pourcentage bdit
+      return {
+          name: g.name,
+          value: pourcentage,
+          target: pourcentage // <-- Haka el target ttwalla nafs el pourcentage eli cht5ouha!
+      };
 });
 
   /* =========================================================
@@ -255,6 +252,8 @@ const SERIES = RESOURCE_CONFIG.map(config => {
   /* =========================================================
      2. USER PROFILE SYNCHRONIZATION
      ========================================================= */
+  /* 2. USER PROFILE SYNCHRONIZATION */
+
 try {
     // Récupérer le nom envoyé depuis PHP
     const params = new URLSearchParams(window.location.search);
