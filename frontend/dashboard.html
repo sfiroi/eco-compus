@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="fr" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EcoCampus - Tableau de Bord</title>
+  <!-- Bootstrap 5 CSS Framework -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Styles personnalisés du thème EcoCampus -->
+<link rel="stylesheet" href="assets/css/dashboard.css"><body>
+
+<div class="shell">
+  <div class="app">
+
+    <!-- =========================================================
+       SIDEBAR (Barre de navigation latérale)
+       ========================================================= -->
+    <aside class="side" aria-label="Sidebar">
+      <div class="brand">EcoCampus</div>
+      
+      <!-- Profil utilisateur -->
+      <div class="user">
+        <div class="avatar" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
+            <circle cx="16" cy="12" r="6"/>
+            <path d="M4 28c1-7 6-10 12-10s11 3 12 10z"/>
+          </svg>
+        </div>
+        <span id="username">Admin</span>
+      </div>
+
+      <!-- Navigation principale -->
+      <nav class="nav" id="nav" aria-label="Main">
+        <ul>
+          <li><a href="dashboard.html" aria-current="page" data-i18n="dash">Dashboard</a></li>
+          <li><a href="notifications.html" data-i18n="notifs">Notifications</a></li>
+          <li><a href="chat.html" data-i18n="ai">Assistant AI</a></li>
+          <li><a href="analyses.html" data-i18n="analyses">Analyses</a></li>
+          <li><a href="mesures.html" data-i18n="mesures">Mesures</a></li>
+          <li><a href="gestion.html" data-i18n="gestion">Gestion</a></li>
+          <li><a href="login.html" data-i18n="logout">Déconnexion</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- =========================================================
+       ZONE PRINCIPALE (Main Content)
+       ========================================================= -->
+    <main>
+      <!-- En-tête de la page -->
+      <div class="head">
+        <h1 id="title" data-i18n="dash">Dashboard</h1>
+        <div class="meta" style="display: flex; align-items: center; gap: 8px;">
+          <!-- Menu déroulant de traduction -->
+          <div style="position: relative; display: inline-block;">
+            <button type="button" class="theme" id="translation-btn">Français</button>
+            <div id="translation-menu" class="dropdown-menu" style="position: absolute; right: 0; top: 100%; display: none; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000;">
+              <button type="button" onclick="changerLangue('fr')" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 6px 12px; color: var(--ink); cursor: pointer; border-radius: 4px;">Français</button>
+              <button type="button" onclick="changerLangue('ar')" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 6px 12px; color: var(--ink); cursor: pointer; border-radius: 4px;">العربية</button>
+              <button type="button" onclick="changerLangue('en')" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 6px 12px; color: var(--ink); cursor: pointer; border-radius: 4px;">English</button>
+            </div>
+          </div>
+          <!-- Bouton d'impression / rapport -->
+          <button type="button" class="theme" id="download-report" onclick="window.print()" aria-label="Imprimer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px;">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+          </button>
+          <!-- Bouton de bascule du mode clair / sombre -->
+          <button type="button" class="theme" id="theme" aria-label="Changer de thème">⏾⋆.˚</button>
+          <button id="btnLire" class="theme" type="button" aria-label="Read aloud" title="Read aloud">🕪</button>
+        </div>
+      </div>
+
+      <!-- Grille de contenu du tableau de bord -->
+      <div class="row g-4">
+        
+        <!-- 1. Section des Jauges (Objectifs annuels) -->
+        <div class="col-12 col-lg-8">
+          <section class="card h-100">
+            <div class="card-head">
+              <div>
+                <h2 data-i18n="goals">Objectifs cette année</h2>
+                <p class="sub" data-i18n="goals_sub">Les repères indiquent l'objectif 2026.</p>
+              </div>
+            </div>
+            <!-- Conteneur injecté dynamiquement par script.js -->
+            <div class="gauges" id="gauges"></div>
+          </section>
+        </div>
+
+        <!-- 2. Section des Alertes -->
+        <div class="col-12 col-lg-4">
+          <section class="card h-100">
+            <div class="card-head">
+              <div>
+                <h2 data-i18n="alerts">Alertes</h2>
+                <p class="sub" data-i18n="last7">7 derniers jours</p>
+              </div>
+              <span class="count" id="count"></span>
+            </div>
+            <button type="button" class="pill" id="readall" data-i18n="readall">Tout marquer comme lu</button>
+            <ul class="alerts" id="alerts">
+              <li style="--c: var(--warn)"><span class="dot"></span><span data-i18n="a1">Science Hall : charge nocturne +12%</span><time data-i18n="d1">Lun</time></li>
+              <li style="--c: var(--good)"><span class="dot"></span><span data-i18n="a2">Réservoir d'eau de pluie rempli à 82%</span><time data-i18n="d2">Dim</time></li>
+              <li style="--c: var(--warn)"><span class="dot"></span><span data-i18n="a3">Bloc C : collecte des déchets retardée</span><time data-i18n="d3">Ven</time></li>
+            </ul>
+          </section>
+        </div>
+
+        <!-- 3. Section du Graphique de Tendance -->
+        <div class="col-12 col-lg-6">
+          <section class="card h-100">
+            <div class="card-head">
+              <div>
+                <h2 data-i18n="trend">Tendance de consommation</h2>
+                <p class="sub" data-i18n="trend_sub">Indice, moyenne mensuelle 2025 = 100.</p>
+              </div>
+            </div>
+            <!-- Conteneur SVG du graphique -->
+            <div class="chart-host" id="chart"></div>
+            <!-- Boutons de filtrage des courbes -->
+            <div class="toggles" id="toggles"></div>
+          </section>
+        </div>
+
+        <!-- 4. Section du Tableau des Bâtiments -->
+        <div class="col-12 col-lg-6">
+          <section class="card h-100">
+            <div class="card-head" style="flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h2 data-i18n="bld">Bâtiments</h2>
+                <p class="sub" data-i18n="bld_sub">Consommation des ressources en Octobre.</p>
+              </div>
+              <!-- Barre de recherche et filtre par ressource -->
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <input type="text" id="search-building" placeholder="Rechercher..." data-i18n-placeholder="search_ph" style="padding: 6px 12px; font-size: 13px; background: var(--track); border: 1px solid var(--line); color: var(--ink); border-radius: 999px; outline: none;">
+                <select id="filter-resource" style="padding: 6px 12px; font-size: 13px; background: var(--track); border: 1px solid var(--line); color: var(--ink); border-radius: 999px; outline: none; cursor: pointer;">
+                  <option value="" data-i18n="all_res">Toutes les ressources</option>
+                  <option value="electricite" data-i18n="electricite">Électricité</option>
+                  <option value="eau" data-i18n="eau">Eau</option>
+                  <option value="chauffage" data-i18n="chauffage">Chauffage</option>
+                </select>
+              </div>
+            </div>
+            <div class="tbl-wrap">
+              <table>
+                <thead>
+                  <tr><th data-i18n="th_bld">Bâtiment</th><th>kWh/m²</th><th data-i18n="th_status">Statut</th></tr>
+                </thead>
+                <tbody>
+                  <tr data-name="bibliothèque" data-resource="electricite"><td data-i18n="b1">Bibliothèque</td><td class="num">14.2<small>−6%</small></td><td><span class="status" style="--c: var(--good)" data-i18n="s_ok">Dans la cible</span></td></tr>
+                  <tr data-name="hall des sciences" data-resource="electricite"><td data-i18n="b2">Hall des Sciences</td><td class="num">31.8<small>+12%</small></td><td><span class="status" style="--c: var(--crit)" data-i18n="s_hi">Au-dessus</span></td></tr>
+                  <tr data-name="résidence étudiante" data-resource="eau"><td data-i18n="b3">Résidence Étudiante</td><td class="num">19.5<small>−2%</small></td><td><span class="status" style="--c: var(--good)" data-i18n="s_ok">Dans la cible</span></td></tr>
+                  <tr data-name="centre sportif" data-resource="chauffage"><td data-i18n="b4">Centre Sportif</td><td class="num">22.1<small>+4%</small></td><td><span class="status" style="--c: var(--warn)" data-i18n="s_warn">À surveiller</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<!-- Script d'affichage du menu déroulant de traduction -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const m = document.getElementById("translation-menu");
+    if(m) {
+      const observer = new MutationObserver(() => {
+        if(m.classList.contains("active")) m.style.display = "block";
+        else m.style.display = "none";
+      });
+      observer.observe(m, { attributes: true, attributeFilter: ["class"] });
+    }
+  });
+</script>
+<!-- Script principal du Dashboard -->
+<script src="assets/js/script.js"></script>
+<script src="assets/js/i18n.js" defer></script>
+</body>
+</html>

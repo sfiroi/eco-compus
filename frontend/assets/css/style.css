@@ -1,0 +1,326 @@
+/* Définition du curseur personnalisé sur l'ensemble de la page */
+html, body {
+    cursor: url("../../images/cursor.png") 0 0, auto;
+}
+
+/* Variables globales de couleurs et d'espacements pour le thème de connexion */
+:root {
+    --forest-dark: #183D2E;
+    --forest-main: #214F3B;
+    --accent-green: #3ea076;
+    --text-dark: #1a2520;
+    --muted: #809188;
+    --input-bg: #f9fbf8;
+    --border: #e2e8e4;
+}
+
+/* Réinitialisation universelle des marges et du dimensionnement (Box-sizing) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f7f4ee 0%, #ede6db 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Conteneur principal de la boîte de connexion (effet de carte avec coins arrondis) */
+.container {
+    width: 90%;
+    max-width: 1000px;
+    min-height: 580px;
+    display: flex;
+    background-color: #ffffff;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 20px 45px rgba(30, 61, 46, 0.12);
+}
+
+/* Côté gauche : Panneau visuel avec image de fond et dégradé vert */
+.visual-side {
+    width: 48%;
+    padding: 50px 45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: white;
+    background: 
+        linear-gradient(
+            rgba(24, 61, 46, 0.88),
+            rgba(33, 79, 59, 0.94)
+        ),
+        url("../../images/background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.brand img {
+    width: 170px;
+    height: auto;
+    display: block;
+}
+
+.welcome {
+    margin: 30px 0;
+}
+
+.tagline {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    color: #a8d5be;
+    margin-bottom: 16px;
+}
+
+.welcome h1 {
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 18px;
+    color: #ffffff;
+}
+
+.welcome p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #d1ebd9;
+}
+
+.footer-text {
+    font-size: 12px;
+    color: #bce3cc;
+    opacity: 0.8;
+}
+
+/* Côté droit : Panneau contenant le formulaire de connexion */
+.login-side {
+    width: 52%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 45px;
+    background-color: #ffffff;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 350px;
+}
+
+.welcome-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.login-box h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* Champs de formulaire (Inputs et labels) */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    color: var(--text-dark);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    background-color: var(--input-bg);
+    color: var(--text-dark);
+}
+
+.form-group input:focus {
+    border-color: var(--forest-main);
+    background-color: #ffffff;
+}
+
+/* Bouton de soumission principal */
+button {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--forest-main);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background-color: var(--forest-dark);
+}
+
+.bottom-text {
+    text-align: center;
+    color: #b0bcba;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-top: 35px;
+}
+
+/* Adaptation Responsive pour les petits écrans (mobiles / tablettes) */
+@media (max-width: 780px) {
+    .container {
+        width: 92%;
+        flex-direction: column;
+    }
+    .visual-side {
+        width: 100%;
+        min-height: 250px;
+        padding: 30px;
+    }
+    .login-side {
+        width: 100%;
+        padding: 35px 25px;
+    }
+}
+
+/* =====================================
+   GESTION - Separation des formulaires
+===================================== */
+
+.gestion-grid {
+    align-items: stretch;
+}
+
+.gestion-card {
+    height: 100%;
+    min-width: 0;
+}
+
+.gestion-card .card-head {
+    min-height: 75px;
+    align-items: center;
+}
+
+.gestion-card .card-head h2 {
+    font-size: 17px;
+    margin: 0;
+}
+
+.gestion-card .card-body {
+    padding: 22px;
+}
+
+.gestion-card .form-control,
+.gestion-card .form-select {
+    width: 100%;
+    min-height: 44px;
+}
+
+.gestion-card button {
+    width: auto;
+    min-width: 110px;
+    align-self: flex-start;
+}
+
+
+/* =====================================
+   MESURES - Tableau plus grand
+===================================== */
+
+.mesures-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    padding: 20px !important;
+}
+
+.mesures-table {
+    width: 100%;
+    min-width: 1050px;
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.mesures-table th {
+    padding: 16px 14px;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.mesures-table td {
+    padding: 16px 14px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.mesures-table tbody tr {
+    min-height: 60px;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    .gestion-card .card-body {
+        padding: 16px;
+    }
+
+    .mesures-table-wrap {
+        padding: 12px !important;
+    }
+}
+
+/* Table Mesures */
+.tbl-wrap {
+    height: 420px !important;
+    max-height: calc(100vh - 250px);
+    overflow: auto !important;
+}
+
+.tbl-wrap table {
+    width: 100%;
+    min-width: 900px;
+    margin-bottom: 0;
+}
+
+.tbl-wrap thead {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+/* Sidebar - fixed height on every page */
+.sidebar {
+    height: calc(100vh - 28px) !important;
+    min-height: 0 !important;
+    max-height: calc(100vh - 28px);
+    flex-shrink: 0;
+    align-self: flex-start;
+    position: sticky;
+    top: 14px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
