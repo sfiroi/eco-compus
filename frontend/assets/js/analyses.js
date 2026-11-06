@@ -31,7 +31,7 @@
 
     if (themeButton) {
       themeButton.textContent =
-        theme === "dark" ? "☀︎" : "⏾";
+        theme === "dark" ? "☀︎˚" : "⏾";
     }
 
     try {

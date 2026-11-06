@@ -19,7 +19,7 @@
   function setTheme(name) {
     root.setAttribute('data-theme', name);
     root.setAttribute('data-bs-theme', name);
-    if (themeButton) themeButton.textContent = name === 'dark' ? '☀︎˚t' : '⏾⋆.˚';
+    if (themeButton) themeButton.textContent = name === 'dark' ? '☀︎˚' : '⏾⋆.˚';
     try { localStorage.setItem('theme', name); } catch (e) {}
   }
 
