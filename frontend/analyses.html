@@ -8,8 +8,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Styles personnalisés du thème EcoCampus -->
   <link rel="stylesheet" href="assets/css/dashboard.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+  <script src="assets/js/animations.js"></script>
 </head>
-<body>
+<body class="page-analyses">
 
 <div class="shell">
   <div class="app">
@@ -34,13 +36,13 @@
       <!-- Navigation principale -->
       <nav class="nav" id="nav" aria-label="Main">
         <ul>
-          <li><a href="dashboard.html" data-i18n="dash">Dashboard</a></li>
-          <li><a href="notifications.html" data-i18n="notifs">Notifications</a></li>
-          <li><a href="chat.html" data-i18n="ai">Assistant AI</a></li>
-          <li><a href="analyses.html"aria-current="page" data-i18n="analyses">Analyses</a></li>
-          <li><a href="mesures.html" data-i18n="mesures">Mesures</a></li>
-          <li><a href="gestion.html" data-i18n="gestion">Gestion</a></li>
-          <li><a href="login.html" data-i18n="logout">Déconnexion</a></li>
+          <li><a href="dashboard.html"><svg class="nav-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span data-i18n="dash">Dashboard</span></a></li>
+          <li><a href="notifications.html"><svg class="nav-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span data-i18n="notifs">Notifications</span></a></li>
+          <li><a href="chat.html"><svg class="nav-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span data-i18n="ai">Assistant AI</span></a></li>
+          <li><a href="analyses.html" aria-current="page"><svg class="nav-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span data-i18n="analyses">Analyses</span></a></li>
+          <li><a href="mesures.html"><svg class="nav-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.3 8.7 8.7 21.3a1 1 0 0 1-1.4 0L2.7 16.7a1 1 0 0 1 0-1.4L15.3 2.7a1 1 0 0 1 1.4 0l4.6 4.6a1 1 0 0 1 0 1.4z"/><path d="m7.5 10.5 2 2"/><path d="m10.5 7.5 2 2"/><path d="m13.5 4.5 2 2"/><path d="m4.5 13.5 2 2"/></svg><span data-i18n="mesures">Mesures</span></a></li>
+          <li><a href="gestion.html"><svg class="nav-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span data-i18n="gestion">Gestion</span></a></li>
+          <li><a href="login.html"><svg class="nav-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg><span data-i18n="logout">Déconnexion</span></a></li>
         </ul>
       </nav>
     </aside>
@@ -68,102 +70,79 @@
         </div>
       </div>
 
-      <!-- Sous-titre indicatif des fonctionnalités d'analyses -->
-      <p class="sub mb-4" style="margin-top: -10px;">2 Évaluation · 6 Max · 7 Min · 8 Comparaison · 9/10/11 Totaux · 12 Moyennes</p>
+      <!-- =====================================================
+           ANALYSES GRID
+           3 cards on the first row, 2 cards on the second row.
+           Each card = a small form + a result area (class "an-out")
+           that analyses.js fills when you click the button.
+           ===================================================== -->
+      <div class="analyses-grid">
 
-      <!-- Grille des formulaires et modules d'analyses -->
-      <div class="row g-4">
-        
-        <!-- 1. Évaluation annuelle -->
-        <div class="col-12 col-lg-6">
-          <section class="card h-100">
-            <div class="card-head"><h2 data-i18n="eval_ann">2 — Évaluation annuelle</h2></div>
-            <div class="card-body vstack gap-2">
-              <input id="eb" class="form-control" placeholder="Bâtiment" data-i18n-placeholder="th_bld">
-              <select id="er" class="form-select">
-                <option value="electricite" data-i18n="electricite">Électricité</option>
-                <option value="eau" data-i18n="eau">Eau</option>
-                <option value="chauffage" data-i18n="chauffage">Chauffage</option>
-              </select>
-              <input id="ey" class="form-control" value="2026">
-              <button id="ev" class="btn btn-outline-secondary btn-sm align-self-start mt-2" data-i18n="evaluer">Évaluer</button>
-              <div id="eo" class="mt-2 text-muted"></div>
-            </div>
-          </section>
-        </div>
+        <!-- 1. Annual evaluation (stars + % of the threshold) -->
+        <section class="card an-card">
+          <div class="card-head"><h2 data-i18n="eval_ann">Évaluation annuelle</h2></div>
+          <div class="an-form">
+            <select id="eb" class="form-select form-select-sm"><option value="" data-i18n="choisir_bld">Choisir un bâtiment</option></select>
+            <select id="er" class="form-select form-select-sm">
+              <option value="electricite" data-i18n="electricite">Électricité</option>
+              <option value="eau" data-i18n="eau">Eau</option>
+              <option value="chauffage" data-i18n="chauffage">Chauffage</option>
+            </select>
+            <input id="ey" class="form-control form-control-sm" type="number" value="2026" aria-label="Année">
+            <button id="ev" class="btn btn-outline-secondary btn-sm" data-i18n="evaluer">Évaluer</button>
+          </div>
+          <div id="eo" class="an-out"><p class="an-hint" data-i18n="an_hint">Le résultat s'affichera ici.</p></div>
+        </section>
 
-        <!-- 2. Comparaison de deux bâtiments -->
-        <div class="col-12 col-lg-6">
-          <section class="card h-100">
-            <div class="card-head"><h2 data-i18n="comp_bld">8 — Comparer deux bâtiments</h2></div>
-            <div class="card-body vstack gap-2">
-              <input id="b1" class="form-control" placeholder="Bâtiment 1" data-i18n-placeholder="batiment_1">
-              <input id="b2" class="form-control" placeholder="Bâtiment 2" data-i18n-placeholder="batiment_2">
-              <select id="cr" class="form-select">
-                <option value="electricite" data-i18n="electricite">Électricité</option>
-                <option value="eau" data-i18n="eau">Eau</option>
-                <option value="chauffage" data-i18n="chauffage">Chauffage</option>
-              </select>
-              <button id="cmp" class="btn btn-outline-secondary btn-sm align-self-start mt-2" data-i18n="comparer">Comparer</button>
-              <div id="co" class="mt-2 text-muted"></div>
-            </div>
-          </section>
-        </div>
+        <!-- 2. Compare two buildings (consumption, threshold and % of threshold) -->
+        <section class="card an-card">
+          <div class="card-head"><h2 data-i18n="comp_bld">Comparer deux bâtiments</h2></div>
+          <div class="an-form">
+            <select id="b1" class="form-select form-select-sm"><option value="" data-i18n="batiment_1">Bâtiment 1</option></select>
+            <select id="b2" class="form-select form-select-sm"><option value="" data-i18n="batiment_2">Bâtiment 2</option></select>
+            <select id="cr" class="form-select form-select-sm">
+              <option value="electricite" data-i18n="electricite">Électricité</option>
+              <option value="eau" data-i18n="eau">Eau</option>
+              <option value="chauffage" data-i18n="chauffage">Chauffage</option>
+            </select>
+            <button id="cmp" class="btn btn-outline-secondary btn-sm" data-i18n="comparer">Comparer</button>
+          </div>
+          <div id="co" class="an-out"><p class="an-hint" data-i18n="an_hint">Le résultat s'affichera ici.</p></div>
+        </section>
 
-        <!-- 3. Valeurs Max / Min -->
-        <div class="col-12 col-lg-6">
-          <section class="card h-100">
-            <div class="card-head"><h2 data-i18n="max_min">6 / 7 — Max / Min</h2></div>
-            <div class="card-body vstack gap-2">
-              <input id="mb" class="form-control" placeholder="Bâtiment" data-i18n-placeholder="th_bld">
-              <select id="mr" class="form-select">
-                <option value="electricite" data-i18n="electricite">Électricité</option>
-                <option value="eau" data-i18n="eau">Eau</option>
-                <option value="chauffage" data-i18n="chauffage">Chauffage</option>
-              </select>
-              <div class="d-flex gap-2 mt-2">
-                <button id="mx" class="btn btn-outline-secondary btn-sm" data-i18n="maximum">Maximum</button>
-                <button id="mn" class="btn btn-outline-secondary btn-sm" data-i18n="minimum">Minimum</button>
-              </div>
-              <div id="mo" class="mt-2 text-muted"></div>
-            </div>
-          </section>
-        </div>
+        <!-- 3. Highest / lowest measure of a building -->
+        <section class="card an-card">
+          <div class="card-head"><h2 data-i18n="max_min">Max / Min</h2></div>
+          <div class="an-form">
+            <select id="mb" class="form-select form-select-sm"><option value="" data-i18n="choisir_bld">Choisir un bâtiment</option></select>
+            <select id="mr" class="form-select form-select-sm">
+              <option value="electricite" data-i18n="electricite">Électricité</option>
+              <option value="eau" data-i18n="eau">Eau</option>
+              <option value="chauffage" data-i18n="chauffage">Chauffage</option>
+            </select>
+            <button id="mx" class="btn btn-outline-secondary btn-sm" data-i18n="maximum">Maximum</button>
+            <button id="mn" class="btn btn-outline-secondary btn-sm" data-i18n="minimum">Minimum</button>
+          </div>
+          <div id="mo" class="an-out"><p class="an-hint" data-i18n="an_hint">Le résultat s'affichera ici.</p></div>
+        </section>
 
-        <!-- 4. Totaux par ressource -->
-        <div class="col-12 col-lg-6">
-          <section class="card h-100">
-            <div class="card-head"><h2 data-i18n="totaux">9 / 10 / 11 — Totaux</h2></div>
-            <div class="card-body"><div id="tot"></div></div>
-          </section>
-        </div>
+        <!-- 4. Total per resource (filled automatically when the page opens) -->
+        <section class="card an-card">
+          <div class="card-head"><h2 data-i18n="totaux">Totaux</h2></div>
+          <div id="tot" class="an-out"></div>
+        </section>
 
-        <!-- 5. Moyennes annuelles détaillées -->
-        <div class="col-12">
-          <section class="card">
-            <div class="card-head"><h2 data-i18n="moy_ann">12 — Moyennes annuelles</h2></div>
-            <div class="card-body">
-              <div class="row g-2 align-items-end">
-                <div class="col-md-4">
-                  <label for="ab" class="form-label small" data-i18n="th_bld">Bâtiment</label>
-                  <select id="ab" class="form-select"><option value="" data-i18n="choisir_bld">Choisir un bâtiment</option></select>
-                </div>
-                <div class="col-md-4">
-                  <label for="ar" class="form-label small" data-i18n="th_res">Ressource</label>
-                  <select id="ar" class="form-select"><option value="" data-i18n="choisir_res">Choisir une ressource</option></select>
-                </div>
-                <div class="col-md-2">
-                  <label for="ay" class="form-label small" data-i18n="annee">Année</label>
-                  <input id="ay" type="number" class="form-control" value="2026">
-                </div>
-                <div class="col-md-2">
-                  <button id="avg" class="btn btn-outline-secondary btn-sm w-100" data-i18n="afficher">Afficher</button>
-                </div>
-              </div>
-              <div id="ao" class="row g-2 mt-3"></div>
-            </div>
-          </section>
-        </div>
+        <!-- 5. Annual averages (this card is twice as wide) -->
+        <section class="card an-card an-wide">
+          <div class="card-head"><h2 data-i18n="moy_ann">Moyennes annuelles</h2></div>
+          <div class="an-form an-form-4">
+            <select id="ab" class="form-select form-select-sm"><option value="" data-i18n="choisir_bld">Choisir un bâtiment</option></select>
+            <select id="ar" class="form-select form-select-sm"><option value="" data-i18n="choisir_res">Choisir une ressource</option></select>
+            <input id="ay" type="number" class="form-control form-control-sm" value="2026" aria-label="Année">
+            <button id="avg" class="btn btn-outline-secondary btn-sm" data-i18n="afficher">Afficher</button>
+          </div>
+          <div id="ao" class="an-out"><p class="an-hint" data-i18n="an_hint">Le résultat s'affichera ici.</p></div>
+        </section>
 
       </div>
     </main>

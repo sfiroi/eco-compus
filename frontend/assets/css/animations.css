@@ -1,0 +1,358 @@
+/* =========================================================
+   EcoCampus - Animations (loader, transitions, hovers)
+   ========================================================= */
+
+/* ---------- 1. LOADER + PAGE TRANSITION OVERLAY ---------- */
+html::before {
+  content: ""; position: fixed; inset: 0; z-index: 99998;
+  background: var(--bg, #f7f4ee);
+  opacity: 0; pointer-events: none;
+  transition: opacity .45s ease;
+}
+html::after {
+  content: ""; position: fixed; z-index: 99999; top: 50%; left: 50%;
+  width: 56px; height: 56px; margin: -28px 0 0 -28px;
+  border-radius: 50%;
+  border: 4px solid color-mix(in srgb, var(--accent, #3ea076) 22%, transparent);
+  border-top-color: var(--accent, #3ea076);
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s ease;
+  animation: eco-spin .9s linear infinite, eco-pulse 1.8s ease-in-out infinite;
+}
+html.page-loading::before, html.page-leaving::before { opacity: 1; pointer-events: all; }
+html.page-loading::after,  html.page-leaving::after  { opacity: 1; }
+
+@keyframes eco-spin  { to { transform: rotate(360deg); } }
+@keyframes eco-pulse { 50% { box-shadow: 0 0 0 14px color-mix(in srgb, var(--accent, #3ea076) 10%, transparent); } }
+
+/* ---------- 2. ENTRANCE ANIMATIONS (after loader) ---------- */
+@keyframes eco-fade-up   { from { opacity: 0; transform: translateY(22px); } }
+@keyframes eco-slide-in  { from { opacity: 0; transform: translateX(-26px); } }
+@keyframes eco-slide-rtl { from { opacity: 0; transform: translateX(26px); } }
+@keyframes eco-drop      { from { opacity: 0; transform: translateY(-14px); } }
+@keyframes eco-pop       { from { opacity: 0; transform: scale(.92) translateY(8px); } }
+
+html.page-ready .side { animation: eco-slide-in .6s cubic-bezier(.2,.8,.2,1) backwards; }
+html[dir="rtl"].page-ready .side { animation-name: eco-slide-rtl; }
+html.page-ready .head { animation: eco-drop .55s ease-out .1s backwards; }
+
+html.page-ready .nav li { animation: eco-slide-in .45s ease-out backwards; }
+html.page-ready .nav li:nth-child(1) { animation-delay: .15s; }
+html.page-ready .nav li:nth-child(2) { animation-delay: .22s; }
+html.page-ready .nav li:nth-child(3) { animation-delay: .29s; }
+html.page-ready .nav li:nth-child(4) { animation-delay: .36s; }
+html.page-ready .nav li:nth-child(5) { animation-delay: .43s; }
+html.page-ready .nav li:nth-child(6) { animation-delay: .50s; }
+html.page-ready .nav li:nth-child(7) { animation-delay: .57s; }
+
+/* Cards: staggered fade-up */
+html.page-ready .row > [class*="col"],
+html.page-ready main > .card,
+html.page-ready .chat-wrap,
+html.page-ready .notif-wrap { animation: eco-fade-up .65s cubic-bezier(.2,.8,.2,1) backwards; }
+html.page-ready .row > [class*="col"]:nth-child(1) { animation-delay: .20s; }
+html.page-ready .row > [class*="col"]:nth-child(2) { animation-delay: .30s; }
+html.page-ready .row > [class*="col"]:nth-child(3) { animation-delay: .40s; }
+html.page-ready .row > [class*="col"]:nth-child(4) { animation-delay: .50s; }
+html.page-ready .row > [class*="col"]:nth-child(5) { animation-delay: .60s; }
+html.page-ready main > .card, html.page-ready .chat-wrap, html.page-ready .notif-wrap { animation-delay: .2s; }
+
+/* Lists & tables (also work for rows injected by JS) */
+html.page-ready .alerts li, html.page-ready .notif-item { animation: eco-slide-in .5s ease-out backwards; }
+html.page-ready .alerts li:nth-child(1), html.page-ready .notif-item:nth-child(1) { animation-delay: .5s; }
+html.page-ready .alerts li:nth-child(2), html.page-ready .notif-item:nth-child(2) { animation-delay: .6s; }
+html.page-ready .alerts li:nth-child(3), html.page-ready .notif-item:nth-child(3) { animation-delay: .7s; }
+html.page-ready tbody tr { animation: eco-fade-up .4s ease-out backwards; }
+html.page-ready tbody tr:nth-child(1) { animation-delay: .35s; }
+html.page-ready tbody tr:nth-child(2) { animation-delay: .40s; }
+html.page-ready tbody tr:nth-child(3) { animation-delay: .45s; }
+html.page-ready tbody tr:nth-child(4) { animation-delay: .50s; }
+html.page-ready tbody tr:nth-child(5) { animation-delay: .55s; }
+html.page-ready tbody tr:nth-child(n+6) { animation-delay: .6s; }
+html.page-ready .gauge { animation: eco-pop .6s cubic-bezier(.2,.8,.2,1) backwards; }
+html.page-ready .gauge:nth-child(2) { animation-delay: .5s; }
+html.page-ready .gauge:nth-child(3) { animation-delay: .65s; }
+html.page-ready .chip { animation: eco-pop .4s ease-out backwards; }
+html.page-ready .chip:nth-child(2) { animation-delay: .1s; }
+html.page-ready .chip:nth-child(3) { animation-delay: .2s; }
+
+/* Chat bubbles pop in */
+.msg { animation: eco-pop .3s ease-out; }
+.msg.mine .bubble { transform-origin: bottom right; }
+.msg.ai .bubble   { transform-origin: bottom left; }
+
+/* Login page */
+html.page-ready .visual-side > * { animation: eco-fade-up .7s ease-out backwards; }
+html.page-ready .visual-side > :nth-child(2) { animation-delay: .15s; }
+html.page-ready .visual-side > :nth-child(3) { animation-delay: .3s; }
+html.page-ready .login-box > * { animation: eco-fade-up .6s ease-out backwards; }
+html.page-ready .login-box > :nth-child(2) { animation-delay: .1s; }
+html.page-ready .login-box > :nth-child(3) { animation-delay: .15s; }
+html.page-ready .login-box > :nth-child(4) { animation-delay: .2s; }
+
+/* ---------- 3. HOVER / INTERACTION EFFECTS ---------- */
+.row.g-4 .card, .notif-item {
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, border-color .3s ease;
+}
+.row.g-4 .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 32px rgba(0,0,0,.12);
+  border-color: var(--accent, #3ea076);
+}
+.notif-item:hover { transform: translateX(4px); box-shadow: 0 6px 18px rgba(0,0,0,.08); }
+
+.nav a { transition: background .25s ease, transform .25s ease, padding .25s ease; }
+.nav a:hover { transform: translateX(6px); }
+html[dir="rtl"] .nav a:hover { transform: translateX(-6px); }
+
+.pill, .btn, .btn-soft, .chip, .theme, button[type="submit"] {
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease, filter .2s ease;
+}
+.pill:hover, .btn-soft:hover, .chip:hover, .theme:hover, .btn:hover { transform: translateY(-2px); }
+.pill:active, .btn-soft:active, .chip:active, .theme:active, .btn:active, button[type="submit"]:active { transform: scale(.96); }
+.pill:hover { box-shadow: 0 6px 16px color-mix(in srgb, var(--accent, #3ea076) 40%, transparent); }
+
+.avatar { transition: transform .4s ease; }
+.avatar:hover { transform: rotate(8deg) scale(1.08); }
+
+tbody tr { transition: background .2s ease; }
+tbody tr:hover { background: color-mix(in srgb, var(--accent, #3ea076) 10%, transparent); }
+
+.form-control, .form-select { transition: border-color .2s ease, box-shadow .25s ease; }
+.card .form-control:focus, .card .form-select:focus {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent, #3ea076) 22%, transparent);
+}
+
+/* Theme button spin */
+#theme.spin { animation: eco-spin-once .6s ease; }
+@keyframes eco-spin-once { to { transform: rotate(360deg) scale(1.1); } }
+
+/* Status dot pulse on alerts */
+.dot, .notif-dot { animation: eco-dot 2s ease-in-out infinite; }
+@keyframes eco-dot { 0%,100% { box-shadow: 0 0 0 0 transparent; } 50% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--c, #3ea076) 25%, transparent); } }
+
+/* Ripple (created by animations.js) */
+.has-ripple { position: relative; overflow: hidden; }
+.eco-ripple {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  background: rgba(255,255,255,.45); transform: scale(0);
+  animation: eco-ripple .6s ease-out forwards;
+}
+@keyframes eco-ripple { to { transform: scale(4); opacity: 0; } }
+
+/* Smooth theme switch */
+html.theme-fade, html.theme-fade * { transition: background-color .4s ease, color .4s ease, border-color .4s ease !important; }
+
+/* ---------- 4. ACCESSIBILITY ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
+}
+@media print { html::before, html::after { display: none !important; } }
+
+/* =========================================================
+   5. EXTRAS : skeleton, toasts, typing, shake, scroll-top, leaves
+   ========================================================= */
+
+/* ---- Skeleton shimmer (shown on empty containers while data loads) ---- */
+.eco-skel { position: relative; min-height: 150px; }
+#chart.eco-skel { min-height: 220px; }
+.eco-skel::after {
+  content: ""; position: absolute; inset: 0; border-radius: 14px; pointer-events: none;
+  background:
+    linear-gradient(100deg, transparent 30%, rgba(255,255,255,.30) 50%, transparent 70%) 100% 0 / 250% 100% no-repeat,
+    var(--track, #e5e5e5);
+  -webkit-mask: repeating-linear-gradient(to bottom, #000 0 38px, transparent 38px 54px);
+          mask: repeating-linear-gradient(to bottom, #000 0 38px, transparent 38px 54px);
+  animation: eco-shimmer 1.4s linear infinite;
+}
+.tbl-wrap.eco-skel::after { inset: 56px 16px 16px; }
+@keyframes eco-shimmer { to { background-position: 0% 0, 0 0; } }
+
+/* ---- Toasts ---- */
+.eco-toasts {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 99990;
+  display: flex; flex-direction: column; align-items: center; gap: 10px; pointer-events: none;
+}
+.eco-toast {
+  --tc: var(--accent, #3ea076);
+  position: relative; overflow: hidden; min-width: 240px; max-width: min(90vw, 440px);
+  display: flex; align-items: center; gap: 10px; padding: 14px 18px 16px;
+  background: var(--surface, #fff); color: var(--ink, #1a2520);
+  border: 1px solid var(--line, #e2e8e4); border-inline-start: 5px solid var(--tc); border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.2);
+  font: 500 14px/1.4 var(--f-body, Arial, sans-serif);
+  animation: eco-toast-in .45s cubic-bezier(.2,.8,.2,1);
+}
+.eco-toast.t-success { --tc: var(--good, #3ea076); }
+.eco-toast.t-error   { --tc: var(--crit, #c0392b); }
+.eco-toast .ic {
+  flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--tc); color: #fff; font-size: 13px; font-weight: 700;
+}
+.eco-toast::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+  background: var(--tc); transform-origin: left; animation: eco-toast-bar 3.8s linear forwards;
+}
+.eco-toast.leaving { animation: eco-toast-out .3s ease forwards; }
+@keyframes eco-toast-in  { from { opacity: 0; transform: translateY(30px) scale(.9); } }
+@keyframes eco-toast-out { to   { opacity: 0; transform: translateY(20px) scale(.95); } }
+@keyframes eco-toast-bar { to   { transform: scaleX(0); } }
+
+/* ---- Typing caret for AI replies ---- */
+.bubble.eco-typing::after {
+  content: ""; display: inline-block; width: 2px; height: 1em; margin-inline-start: 3px;
+  background: currentColor; vertical-align: text-bottom; animation: eco-caret .7s steps(1) infinite;
+}
+@keyframes eco-caret { 50% { opacity: 0; } }
+
+/* ---- Login shake ---- */
+.eco-shake { animation: eco-shake .6s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes eco-shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-8px); }
+  40%, 60% { transform: translateX(8px); }
+}
+.eco-invalid { border-color: var(--crit, #c0392b) !important; box-shadow: 0 0 0 4px rgba(192,57,43,.2) !important; }
+
+/* ---- Scroll-to-top button ---- */
+.eco-top {
+  position: fixed; inset-inline-end: 24px; bottom: 24px; z-index: 9990;
+  width: 46px; height: 46px; padding: 0; border: 0; border-radius: 50%;
+  display: grid; place-items: center; cursor: pointer;
+  background: var(--accent, #3ea076); color: var(--accent-ink, #fff);
+  box-shadow: 0 8px 20px rgba(0,0,0,.22);
+  opacity: 0; transform: translateY(20px) scale(.8); pointer-events: none;
+  transition: opacity .3s ease, transform .3s cubic-bezier(.2,.8,.2,1), filter .2s ease;
+}
+.eco-top.show { opacity: 1; transform: none; pointer-events: auto; }
+.eco-top.show:hover { transform: translateY(-4px); filter: brightness(1.1); }
+.eco-top svg { width: 22px; height: 22px; }
+
+/* ---- Floating leaves background ---- */
+.eco-leaves { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: -1; }
+.eco-leaf {
+  position: absolute; top: -60px; color: var(--accent, #3ea076); opacity: .2;
+  animation: eco-fall var(--dur, 26s) linear var(--delay, 0s) infinite; will-change: transform;
+}
+.eco-leaf svg { display: block; width: 100%; height: 100%; }
+@keyframes eco-fall {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+  25%  { transform: translate3d(var(--sway, 40px), 27vh, 0) rotate(calc(var(--rot, 360deg) * .25)); }
+  50%  { transform: translate3d(calc(var(--sway, 40px) * -1), 55vh, 0) rotate(calc(var(--rot, 360deg) * .5)); }
+  75%  { transform: translate3d(var(--sway, 40px), 82vh, 0) rotate(calc(var(--rot, 360deg) * .75)); }
+  100% { transform: translate3d(0, calc(100vh + 120px), 0) rotate(var(--rot, 360deg)); }
+}
+@media (prefers-reduced-motion: reduce) { .eco-leaves { display: none; } }
+@media print { .eco-leaves, .eco-toasts, .eco-top { display: none !important; } }
+
+/* ---- Toast: warning ---- */
+.eco-toast.t-warning { --tc: var(--warn, #e6a700); }
+.eco-skel { color: transparent !important; }
+
+/* =========================================================
+   6. WELCOME ANIMATION (shown after a successful login)
+   ========================================================= */
+.eco-welcome {
+  position: fixed; inset: 0; z-index: 100000;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; padding: 24px; text-align: center; color: #fff; overflow: hidden;
+  background: radial-gradient(circle at 50% 38%, #2f6b50 0%, #214F3B 45%, #183D2E 100%);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  opacity: 0; visibility: hidden;
+  transition: opacity .5s ease, visibility .5s;
+}
+.eco-welcome.show { opacity: 1; visibility: visible; }
+.eco-welcome.out  { opacity: 0; transform: scale(1.05); transition: opacity .45s ease, transform .45s ease; }
+
+.ew-icon { position: relative; width: 96px; height: 96px; display: grid; place-items: center; margin-bottom: 8px; }
+.ew-ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid rgba(168, 213, 190, .55); opacity: 0; transform: scale(.8);
+}
+.eco-welcome.show .ew-ring { animation: ew-ring 2.2s ease-out .5s infinite; }
+.eco-welcome.show .ew-ring:nth-child(2) { animation-delay: 1.0s; }
+.eco-welcome.show .ew-ring:nth-child(3) { animation-delay: 1.5s; }
+@keyframes ew-ring { 0% { opacity: .8; transform: scale(.8); } 100% { opacity: 0; transform: scale(2.6); } }
+
+.ew-check { position: relative; width: 96px; height: 96px; opacity: 0; transform: scale(.5);
+  filter: drop-shadow(0 0 16px rgba(168, 213, 190, .6)); }
+.eco-welcome.show .ew-check { animation: ew-pop .6s cubic-bezier(.2, .9, .3, 1.3) .2s forwards; }
+.ew-c { stroke: #a8d5be; stroke-width: 3; stroke-dasharray: 146; stroke-dashoffset: 146; }
+.ew-p { stroke: #fff; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 40; stroke-dashoffset: 40; }
+.eco-welcome.show .ew-c { animation: ew-draw .7s ease .35s forwards; }
+.eco-welcome.show .ew-p { animation: ew-draw .45s ease .95s forwards; }
+@keyframes ew-draw { to { stroke-dashoffset: 0; } }
+@keyframes ew-pop  { to { opacity: 1; transform: scale(1); } }
+
+.ew-title { margin: 0; font-size: clamp(28px, 5vw, 46px); font-weight: 700; line-height: 1.2;
+  opacity: 0; transform: translateY(18px); }
+.ew-sub   { margin: 0; font-size: 16px; color: #bce3cc; opacity: 0; transform: translateY(12px); }
+.eco-welcome.show .ew-title { animation: ew-up .6s ease 1.05s forwards; }
+.eco-welcome.show .ew-sub   { animation: ew-up .6s ease 1.3s forwards; }
+@keyframes ew-up { to { opacity: 1; transform: none; } }
+
+.ew-bar { width: min(260px, 70vw); height: 5px; margin-top: 14px; border-radius: 99px;
+  background: rgba(255,255,255,.18); overflow: hidden; opacity: 0; }
+.ew-bar i { display: block; width: 100%; height: 100%; background: #a8d5be; transform: scaleX(0); transform-origin: left; }
+html[dir="rtl"] .ew-bar i { transform-origin: right; }
+.eco-welcome.show .ew-bar   { animation: ew-fade .3s ease 1.4s forwards; }
+.eco-welcome.show .ew-bar i { animation: ew-fill 1.5s ease-in-out 1.5s forwards; }
+@keyframes ew-fade { to { opacity: 1; } }
+@keyframes ew-fill { to { transform: scaleX(1); } }
+
+/* leaves bursting out of the check mark */
+.ew-leaf { position: absolute; left: 50%; top: 38%; width: 22px; height: 22px; margin: -11px 0 0 -11px;
+  color: #a8d5be; opacity: 0; pointer-events: none; }
+.ew-leaf svg { display: block; width: 100%; height: 100%; }
+.eco-welcome.show .ew-leaf { animation: ew-burst 1.9s cubic-bezier(.2, .7, .3, 1) calc(.95s + var(--d, 0s)) forwards; }
+@keyframes ew-burst {
+  0%   { opacity: 0; transform: translate(0, 0) scale(.3) rotate(0); }
+  15%  { opacity: .95; }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.1) rotate(var(--r)); }
+}
+@media print { .eco-welcome { display: none !important; } }
+
+/* =========================================================
+   7. TREND CHART ("Tendance de consommation" on the dashboard)
+   The class "intro" is added to #chart by script.js when the animation must play.
+   Order of the show:  grid  ->  curves draw themselves  ->  dots pop along the line
+                       ->  soft area fades in  ->  last values appear.
+   --i = number of the curve (0,1,2)   --k = month number (0..11)
+   ========================================================= */
+.chart-dot { cursor: pointer; transform-box: fill-box; transform-origin: center; transition: transform .2s ease; }
+.chart-dot:hover { transform: scale(1.7); }
+
+.chart-host.intro .ax .grid-l,
+.chart-host.intro .ax text { opacity: 0; animation: eco-fade-in .6s ease .15s forwards; }
+
+/* pathLength="1" lets us use dasharray 1 = "the whole line", whatever its real length */
+.chart-host.intro .chart-line {
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: eco-line-draw 1.9s cubic-bezier(.45, .05, .25, 1) calc(.45s + var(--i, 0) * .35s) forwards;
+}
+.chart-host.intro .chart-dot {
+  opacity: 0;
+  animation: eco-dot-in .45s cubic-bezier(.2, .9, .3, 1.5) calc(.45s + var(--i, 0) * .35s + var(--k, 0) * .15s) forwards;
+}
+.chart-host.intro .chart-area {
+  opacity: 0;
+  animation: eco-fade-in 1s ease calc(1.5s + var(--i, 0) * .35s) forwards;
+}
+.chart-host.intro .end-v {
+  opacity: 0;
+  animation: eco-fade-in .5s ease calc(2.3s + var(--i, 0) * .35s) forwards;
+}
+
+@keyframes eco-line-draw { to { stroke-dashoffset: 0; } }
+@keyframes eco-fade-in   { to { opacity: 1; } }
+@keyframes eco-dot-in    { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+
+/* ---- Analyses page: cards fade in one after the other, bars grow ---- */
+html.page-ready .analyses-grid > .card { animation: eco-fade-up .6s cubic-bezier(.2, .8, .2, 1) backwards; }
+html.page-ready .analyses-grid > .card:nth-child(1) { animation-delay: .20s; }
+html.page-ready .analyses-grid > .card:nth-child(2) { animation-delay: .28s; }
+html.page-ready .analyses-grid > .card:nth-child(3) { animation-delay: .36s; }
+html.page-ready .analyses-grid > .card:nth-child(4) { animation-delay: .44s; }
+html.page-ready .analyses-grid > .card:nth-child(5) { animation-delay: .52s; }
+.an-out > .res { animation: eco-pop .35s ease-out; }

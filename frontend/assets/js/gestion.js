@@ -1,6 +1,7 @@
 /**
  * EcoCampus - Management Script (Connected with Flask & Module C)
  */
+// Everything is inside one function so our variables stay private.
 (() => {
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => document.querySelectorAll(selector);
@@ -25,6 +26,7 @@
   setTheme(localStorage.getItem('theme') || 'light');
 
   // Generic API Helper
+  // Calls Flask. When the server is off it returns { error: true } instead of crashing.
   async function api(url, options) {
     try {
       const res = await fetch(url, options);
@@ -35,10 +37,13 @@
   }
 
   // 13 — Add new measure form submission
+  // ADD FORM: when it is sent, read the fields, send them to Flask (/api/measure).
+  // Flask asks the C program to save the measure, then we show a success or error message.
   const addForm = $('#add');
   if (addForm) {
     addForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      // FormData reads every field of the form, then we turn the numbers into real numbers with parseFloat.
       const formData = new FormData(e.target);
       const data = {
         batiment: formData.get('batiment'),
@@ -56,34 +61,36 @@
 
       const addo = $('#addo');
       if (res && res.ok) {
-        addo.innerHTML = `<div class="alert alert-success">Mesure ajoutée avec succès (ID: ${res.id})</div>`;
+        addo.innerHTML = `<div class="alert alert-success">${t('g_added', { id: res.id })}</div>`;
         e.target.reset();
       } else {
-        addo.innerHTML = `<div class="alert alert-danger">${res.error || 'Erreur lors de l\'ajout.'}</div>`;
+        addo.innerHTML = `<div class="alert alert-danger">${t('g_add_err')}</div>`;
       }
     });
   }
 
   // 14 — Delete measure by ID action
+  // DELETE BUTTON: reads the ID typed by the user and asks Flask to delete that measure.
   const btnDel = $('#del');
   if (btnDel) {
     btnDel.addEventListener('click', async () => {
       const idVal = $('#id').value;
       const delo = $('#delo');
       if (!idVal) {
-        delo.innerHTML = '<div class="alert alert-warning">Veuillez entrer un ID.</div>';
+        delo.innerHTML = `<div class="alert alert-warning">${t('g_need_id')}</div>`;
         return;
       }
       const res = await api('/api/measure/' + idVal, { method: 'DELETE' });
       if (res && res.ok) {
-        delo.innerHTML = `<div class="alert alert-success">Mesure ${idVal} supprimée.</div>`;
+        delo.innerHTML = `<div class="alert alert-success">${t('g_deleted', { id: idVal })}</div>`;
       } else {
-        delo.innerHTML = `<div class="alert alert-danger">${res.error || 'Mesure introuvable.'}</div>`;
+        delo.innerHTML = `<div class="alert alert-danger">${t('g_not_found')}</div>`;
       }
     });
   }
 
   // 15 — Verify compliance form submission
+  // VERIFY FORM: asks Flask if a measure is valid and if it is above its threshold (nothing is saved).
   const verForm = $('#ver');
   if (verForm) {
     verForm.addEventListener('submit', async (e) => {
@@ -108,7 +115,7 @@
         let alerteText = res.alerte ? ' (Mais attention : Alerte dépassement de seuil !)' : ' (Conforme et sans alerte)';
         vero.innerHTML = `<div class="alert alert-success">Mesure valide.${alerteText}</div>`;
       } else {
-        vero.innerHTML = `<div class="alert alert-danger">Mesure non valide ou incorrecte.</div>`;
+        vero.innerHTML = `<div class="alert alert-danger">${t('g_invalid')}</div>`;
       }
     });
   }

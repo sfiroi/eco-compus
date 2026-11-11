@@ -6,12 +6,14 @@
     <title>EcoCampus - Connexion</title>
     <!-- Styles spécifiques pour la page de connexion -->
     <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+  <script src="assets/js/animations.js"></script>
 </head>
 <body>
 
     <div class="container" style="position: relative;">
         <!-- Menu déroulant de traduction pour la page de connexion -->
-        <div style="position: absolute; top: 20px; right: 20px; z-index: 10;">
+        <div class="lang-switch" style="position: absolute; top: 20px; right: 20px; z-index: 10;">
           <div style="position: relative; display: inline-block;">
             <button type="button" class="theme" id="translation-btn">Français</button>
             <div id="translation-menu" class="dropdown-menu" style="position: absolute; right: 0; top: 100%; display: none; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000;">
@@ -51,7 +53,8 @@
                 <p class="subtitle" data-i18n="lg_sub">Entrez vos identifiants pour continuer.</p>
 
                 <!-- Formulaire de soumission POST vers le backend PHP -->
-                <form method="POST" action="http://localhost/EcoCampus/backend/login.php">
+                <form id="loginForm" method="POST" action="http://localhost/EcoCampus/backend/login.php">
+                    <input type="hidden" name="login" value="1">
 
                     <div class="form-group">
                         <label for="email" data-i18n="lg_email">Adresse e-mail</label>
@@ -70,7 +73,16 @@
                         <input type="hidden" id="captchaCorrect" name="captchaCorrect">
                     </div>
 
-                    <button type="submit" name="login" data-i18n="lg_btn">Se connecter &rarr;</button>
+                    <p id="loginError" class="login-error" role="alert" aria-live="assertive"></p>
+
+                    <!--
+                      Anchor: keeps a hole in the form while the button is elsewhere.
+                      login.js moves #loginBtn on hover until #captcha equals the
+                      hidden correct answer. After that, the button stays here.
+                    -->
+                    <div class="login-btn-anchor" id="loginBtnAnchor">
+                        <button type="submit" id="loginBtn" data-i18n="lg_btn">Se connecter &rarr;</button>
+                    </div>
 
                 </form>
 
@@ -96,6 +108,7 @@
     <!-- Script de génération et vérification du CAPTCHA -->
     <script src="assets/js/captcha.js"></script>
     <script src="assets/js/i18n.js" defer></script>
+    <script src="assets/js/login.js" defer></script>
 
 </body>
 </html>

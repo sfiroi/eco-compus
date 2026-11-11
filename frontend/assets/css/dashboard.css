@@ -1,6 +1,7 @@
 /* =========================================================
    1. VARIABLES & THÈMES (Clair par défaut, Sombre via [data-theme="dark"])
    ========================================================= */
+/* Colors and fonts of the site (light theme). Every color is a variable like var(--accent), so changing it here changes the whole site. */
 :root {
   --bg: #dde5ac;
   --bg-overlay: rgba(221, 229, 172, 0.35);
@@ -22,6 +23,7 @@
   --f-mono:    'IBM Plex Mono', ui-monospace, Consolas, monospace;
 }
 
+/* Dark theme: only the colors that change are listed. The theme button sets data-theme="dark" on <html>. */
 :root[data-theme="dark"] {
   color-scheme: dark;
   --bg: #1b2c25;
@@ -66,7 +68,9 @@ body::before {
 /* =========================================================
    3. LAYOUT & STRUCTURE (Grille principale)
    ========================================================= */
+/* Page frame: centered, never wider than 1440px. */
 .shell { max-width: 1440px; margin: 0 auto; }
+/* Two columns: the sidebar (248px) and the main content. */
 .app { display: grid; grid-template-columns: 248px minmax(0, 1fr); gap: 24px; }
 main { min-width: 0; display: flex; flex-direction: column; gap: 20px; }
 .row > [class*="col"] { min-width: 0; }
@@ -88,6 +92,16 @@ h1 {
   display: flex; flex-direction: column; gap: 22px; min-width: 0;
   padding: 28px 18px 22px; background: color-mix(in srgb, var(--surface) 88%, transparent);
   backdrop-filter: blur(10px); border: 1px solid var(--line); border-radius: 32px;
+}
+/* The sidebar has the SAME height on every page: the full screen height minus the 24px of
+   page padding (top + bottom). It stays in place while the page scrolls (sticky).
+   Before, it stretched to follow the height of each page, so it looked different everywhere. */
+@media (min-width: 1101px) {
+  .side {
+    position: sticky; top: 24px; align-self: start;
+    height: calc(100vh - 48px); overflow-y: auto;
+    scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+  }
 }
 .sidebar {
   height: calc(100vh - 28px) !important;
@@ -124,6 +138,7 @@ h1 {
 /* =========================================================
    5. COMPOSANTS (Cartes, Jauges SVG, Alertes, Tableaux)
    ========================================================= */
+/* The rounded "card" box used for every block of the site. */
 .card {
   display: block; min-width: 0; padding: 24px;
   background: color-mix(in srgb, var(--surface) 88%, transparent);
@@ -348,3 +363,124 @@ html[dir="rtl"] .chat-form, html[dir="rtl"] .chat-log { direction: rtl; }
   .gauge figcaption { font-size: 13px; }
   .user span { display: none; }
 }
+
+
+/* =========================================================
+   8. ANALYSES PAGE
+   Layout: 3 cards on the first row, 2 cards on the second row.
+   On a normal computer screen everything fits WITHOUT any page scroll.
+   ========================================================= */
+.analyses-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.analyses-grid .an-wide { grid-column: span 2; }
+
+.an-card { display: flex; flex-direction: column; min-height: 0; padding: 16px 18px; transition: border-color .3s ease; }
+.an-card:hover { border-color: var(--accent); }
+.an-card .card-head { margin-bottom: 10px; }
+
+/* Form of a card: 2 columns (list | list, then field | button) */
+.an-form { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.an-form.an-form-4 { grid-template-columns: 1.4fr 1.2fr .7fr auto; }
+.an-form .btn { white-space: nowrap; }
+
+/* Result area: takes the remaining height of the card. */
+.an-out { flex: 1; min-height: 0; margin-top: 12px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.an-hint { margin: 0; color: var(--muted); font-size: 13px; }
+.an-msg  { margin: 0; padding: 10px 12px; font-size: 13px; border-radius: 12px; color: var(--ink);
+           background: color-mix(in srgb, var(--warn) 18%, transparent); }
+.an-msg.err { background: color-mix(in srgb, var(--crit) 16%, transparent); }
+
+/* Big screens only: lock the page to the screen height so there is no scroll bar */
+@media (min-width: 1101px) and (min-height: 680px) {
+  body.page-analyses main { height: calc(100vh - 48px); }
+  body.page-analyses .analyses-grid { flex: 1; min-height: 0; grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+}
+/* Smaller screens: cards stack and the page can scroll normally */
+@media (max-width: 1100px) {
+  .analyses-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .analyses-grid .an-wide { grid-column: span 2; }
+}
+@media (max-width: 700px) {
+  .analyses-grid { grid-template-columns: minmax(0, 1fr); }
+  .analyses-grid .an-wide { grid-column: auto; }
+  .an-form.an-form-4 { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---- Result pieces (used by analyses.js) ---- */
+.res { display: flex; flex-direction: column; gap: 8px; }
+.res-line { margin: 0; font-size: 13px; color: var(--muted); }
+.res-line strong { color: var(--ink); }
+
+/* Status color: --c is set on the element (green / orange / red) */
+.badge-s {
+  display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; flex: none; white-space: nowrap;
+  padding: 3px 10px; border-radius: 999px; font: 500 12px var(--f-body); color: var(--ink);
+  background: color-mix(in srgb, var(--c) 16%, transparent);
+}
+.badge-s::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+
+/* Progress bar. The thin vertical mark is the threshold (100 %). The bar goes up to 150 %. */
+.meter { position: relative; height: 8px; border-radius: 999px; background: var(--track); }
+.meter > i {
+  display: block; width: 0; height: 100%; border-radius: 999px; background: var(--c, var(--accent));
+  transition: width 1.1s cubic-bezier(.4, 0, .2, 1);
+}
+.meter::after {
+  content: ""; position: absolute; top: -3px; bottom: -3px; inset-inline-start: 66.67%;
+  width: 2px; background: var(--ink); opacity: .45;
+}
+.meter-row { display: flex; justify-content: space-between; gap: 8px; font: 400 12px var(--f-mono); color: var(--muted); }
+.meter-row b { color: var(--ink); font-weight: 600; }
+
+/* Annual evaluation */
+.stars { font-size: 26px; line-height: 1; letter-spacing: 3px; color: var(--warn); }
+.res-title { display: flex; align-items: baseline; gap: 10px; }
+.res-title strong { font: 700 22px var(--f-display); }
+.res-title span { color: var(--muted); font-size: 14px; }
+
+/* Comparison of two buildings */
+.cmp { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 10px; align-items: stretch; }
+.cmp-vs { align-self: center; font: 600 11px var(--f-mono); color: var(--muted); }
+.cmp-item {
+  display: flex; flex-direction: column; gap: 6px; min-width: 0; padding: 10px 12px;
+  border: 1px solid var(--line); border-radius: 16px; background: color-mix(in srgb, var(--track) 55%, transparent);
+}
+.cmp-item.is-high { border-color: var(--c); }
+.cmp-name { font: 600 13px var(--f-display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cmp-val  { font: 700 22px/1 var(--f-display); }
+.cmp-val small { font: 400 11px var(--f-mono); color: var(--muted); margin-inline-start: 4px; white-space: nowrap; }
+.cmp-pct  { font: 600 13px var(--f-mono); color: var(--c); }
+
+/* Max / Min */
+.mm-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.mm-type {
+  padding: 3px 10px; border-radius: 999px; background: var(--accent); color: var(--accent-ink);
+  font: 600 11px var(--f-mono); letter-spacing: .08em; text-transform: uppercase;
+}
+.mm-date { font: 400 12px var(--f-mono); color: var(--muted); }
+.mm-val  { font: 700 34px/1 var(--f-display); }
+.mm-meta { margin: 0; font-size: 13px; color: var(--muted); }
+
+/* Totals */
+.tot-row { display: grid; grid-template-columns: 110px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.tot-row:last-child { border-bottom: 0; }
+.tot-row .meter::after { display: none; }
+.tot-name { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.tot-name::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+.tot-val  { font: 600 15px var(--f-mono); }
+
+/* Annual averages */
+.avg-head { margin: 0 0 8px; font-size: 13px; color: var(--muted); }
+.avg-head strong { color: var(--ink); }
+.avg-grid { display: grid; grid-template-columns: 1fr 1.6fr 1fr; gap: 12px; }
+.tile {
+  display: flex; flex-direction: column; justify-content: center; gap: 8px; min-width: 0; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: 16px; background: color-mix(in srgb, var(--track) 55%, transparent);
+}
+.tile-label { font: 500 11px var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.tile-val   { font: 700 28px/1 var(--f-display); }
+@media (max-width: 700px) { .avg-grid { grid-template-columns: 1fr; } }
+
+/* Icônes de la barre de navigation */
+.nav a { display: flex; align-items: center; gap: 12px; }
+.nav-ico { flex: none; opacity: .85; }
+.nav a:hover .nav-ico, .nav a[aria-current="page"] .nav-ico { opacity: 1; }

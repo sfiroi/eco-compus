@@ -2,6 +2,7 @@
  * EcoCampus - Notifications Script
  * Handles theme synchronization and interactive "mark all as read" toggles for notifications.
  */
+
 (() => {
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => document.querySelectorAll(s);
@@ -34,15 +35,20 @@
   // ---------------------------------------------------------
   const container = $('#notifications-container');
   const markAllBtn = $('#mark-all-read');
+  // Above 130 % of the threshold = red (critical). Otherwise = orange (warning).
   const CRIT_RATIO = 1.3; // >= 130% du seuil = critique, sinon avertissement
+  // The list of alerts is refreshed every 30 seconds.
   const REFRESH_MS = 30000;
+  // Name under which we remember (in the browser) which alerts were marked as read.
   const READ_KEY = 'notif_read_ids';
   let allRead = false;
 
+  // Safety: makes text harmless before it is put inside HTML.
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (ch) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
   ));
 
+  // Puts a capital first letter: "eau" -> "Eau".
   const label = (s) => {
     const t = String(s || '');
     return t.charAt(0).toUpperCase() + t.slice(1);
@@ -54,6 +60,7 @@
     return m ? new Date(+m[3], +m[1] - 1, +m[2]) : null;
   }
 
+  // Turns a date into friendly text: "Aujourd'hui", "Hier", "Il y a 5 j"...
   function relativeDate(d) {
     if (!d) return '';
     const days = Math.floor((Date.now() - d.getTime()) / 86400000);
@@ -62,20 +69,49 @@
     if (days < 30) return `Il y a ${days} j`;
     return d.toLocaleDateString('fr-FR');
   }
-
+  function translateBuilding(name) {
+    if (!name) return '';
+    // Tahwil al-ism al-mawjoud fi al-data ila muftah sghir (lowercase)
+    const cleanKey = 'b_' + String(name).trim().toLowerCase()
+      .replace(/\s+/g, '_')
+      .replace(/\./g, '');
+    
+    // Idha kan al-muftah mawjud fi t(), ista'milhu, wa illa rji' bil-ism al-asli
+    if (typeof t === 'function') {
+      const translated = t(cleanKey);
+      if (translated !== cleanKey) return translated;
+    }
+    return name;
+  }
+  
+  // Reads the list of "already read" alert ids from the browser memory.
   function loadReadIds() {
     try { return new Set(JSON.parse(localStorage.getItem(READ_KEY) || '[]')); }
     catch (e) { return new Set(); }
   }
 
+  // Saves that list back into the browser memory.
   function saveReadIds(set) {
     try { localStorage.setItem(READ_KEY, JSON.stringify([...set])); } catch (e) {}
   }
 
+  // Changes the text of the big button ("mark all as read" / "as unread").
   function updateMarkAllLabel() {
-    if (markAllBtn) {
-      markAllBtn.textContent = allRead ? 'Tout marquer comme non lu' : 'Tout marquer comme lu';
-    }
+  if (markAllBtn) {
+    // Tasta3mel fonction t() mta3 l'i18n bech tjib el tarjama s7iha bel lougha el 7aliya
+    markAllBtn.textContent = allRead ? t('unread') : t('readall');
+  }
+}
+
+  // Draws one card per anomaly, newest first. Red when very high, orange otherwise.
+ // Tarjamat al-tarikh al-nisbi (Relative Date Translation)
+  function relativeDate(d) {
+    if (!d) return '';
+    const days = Math.floor((Date.now() - d.getTime()) / 86400000);
+    if (days <= 0) return t('relative_today');
+    if (days === 1) return t('relative_yesterday');
+    if (days < 30) return t('relative_days', { days: days });
+    return d.toLocaleDateString(document.documentElement.lang === 'ar' ? 'ar-SA' : (document.documentElement.lang === 'en' ? 'en-US' : 'fr-FR'));
   }
 
   function render(anomalies) {
@@ -83,38 +119,51 @@
     const readIds = loadReadIds();
 
     if (!anomalies.length) {
-      container.innerHTML = '<p class="sub" id="notif-status">Aucune anomalie détectée. 🎉</p>';
+      container.innerHTML = `<p class="sub" id="notif-status">${t('none_results')} 🎉</p>`;
       return;
     }
+    
 
-    // Plus récentes d'abord
     const sorted = anomalies.slice().sort((a, b) => {
       const da = parseDate(a.date), db = parseDate(b.date);
       return (db ? db.getTime() : 0) - (da ? da.getTime() : 0);
     });
-
+    
     container.innerHTML = sorted.map((m) => {
       const ratio = m.seuil > 0 ? m.valeur / m.seuil : 0;
       const pct = Math.round((ratio - 1) * 100);
       const color = ratio >= CRIT_RATIO ? 'var(--crit)' : 'var(--warn)';
       const isRead = readIds.has(m.id);
+      
+      // 1. Déclaration w iste'mal mte' buildingName
+      const buildingName = translateBuilding(m.batiment);
+
+      const resKey = 'resource_' + String(m.ressource || '').toLowerCase();
+      const resName = typeof t === 'function' && t(resKey) !== resKey ? t(resKey) : label(m.ressource);
+
+      // 2. Houni win "nbread" (sta3melt) el buildingName fi west titleText
+      const titleText = t('notif_above', { batiment: esc(buildingName), ressource: esc(resName) });
+      const descText = t('notif_desc', { valeur: esc(m.valeur), seuil: esc(m.seuil), pct: pct });
+      const timeText = relativeDate(parseDate(m.date)) || m.date;
+
       return `
         <div class="notif-item${isRead ? ' read' : ''}" data-id="${esc(m.id)}" style="--c: ${color}; cursor: pointer;">
           <div class="notif-content">
             <span class="notif-dot"></span>
             <div class="notif-text">
-              <h3>${esc(m.batiment)} : ${esc(label(m.ressource))} au-dessus du seuil</h3>
-              <p>Consommation de ${esc(m.valeur)} pour un seuil de ${esc(m.seuil)} (+${pct}%).</p>
+              <h3>${titleText}</h3>
+              <p>${descText}</p>
             </div>
           </div>
-          <span class="notif-time">${esc(relativeDate(parseDate(m.date)) || m.date)}</span>
+          <span class="notif-time">${timeText}</span>
         </div>`;
     }).join('');
-
+    
     allRead = $$('.notif-item').length > 0 && [...$$('.notif-item')].every(i => i.classList.contains('read'));
     updateMarkAllLabel();
   }
 
+  // Asks Flask for the anomalies and draws them. If the server fails, we keep what is already shown.
   async function loadAlerts() {
     if (!container) return;
     try {
@@ -123,9 +172,8 @@
       const json = await res.json();
       render(Array.isArray(json.data) ? json.data : []);
     } catch (e) {
-      // On garde l'affichage actuel lors d'un rafraîchissement raté
       if (!container.querySelector('.notif-item')) {
-        container.innerHTML = '<p class="sub" id="notif-status">Impossible de charger les alertes. Vérifiez que le serveur est démarré.</p>';
+        container.innerHTML = `<p class="sub" id="notif-status">${t('err')}</p>`;
       }
     }
   }
@@ -160,6 +208,8 @@
     });
   }
 
+  // Start now, then repeat automatically every 30 seconds.
   loadAlerts();
   setInterval(loadAlerts, REFRESH_MS);
+  window.chargerAlertesNotifications = loadAlerts;
 })();

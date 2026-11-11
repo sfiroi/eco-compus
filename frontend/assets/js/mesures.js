@@ -1,15 +1,20 @@
 /**
  * EcoCampus - Script Unifié (API Flask + Internationalisation + Thème + Filtres Avancés)
  */
+// Everything is wrapped in a function so our variables stay private (they cannot clash with other scripts).
 (() => {
   "use strict";
 
+  // Short names: $("#id") finds ONE element, $$(".class") finds ALL matching elements.
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => document.querySelectorAll(selector);
 
+  // mesures = the list of all measures loaded from Flask.
   let mesures = [];
+  // afficherAnomalies = true when the "Anomalies seulement" filter is switched on.
   let afficherAnomalies = false;
 
+  // Building names in 3 languages (French / Arabic / English). Used to display AND search buildings.
   const nomsBatiments = {
     "biblio": { fr: "Biblio", ar: "المكتبة", en: "Library" },
     "bibliotheque annexe": { fr: "Bibliothèque annexe", ar: "المكتبة الفرعية", en: "Annex Library" },
@@ -32,18 +37,22 @@
     "laboratoire reseau": { fr: "Laboratoire réseau", ar: "مخبر الشبكات", en: "Network Laboratory" }
   };
 
+  // Returns the language chosen on the page: "fr", "ar" or "en".
   const langueCourante = () =>
     (typeof langue !== "undefined" && langue) ||
     localStorage.getItem("langue") || "fr";
 
+  // Gives the translated text of a key (uses t() from i18n.js).
   const traduire = (key) =>
     typeof t === "function" ? t(key) : key;
 
+  // Returns the building name in the current language (or the original name if there is no translation).
   const texteBatiment = (nom) => {
     const item = nomsBatiments[String(nom).trim().toLowerCase()];
     return item ? (item[langueCourante()] || item.fr) : nom;
   };
 
+  // Returns the resource name (électricité / eau / chauffage) in the current language.
   const texteRessource = (ressource) => {
     const cle = {
       electricite: "resource_electricite",
@@ -53,17 +62,21 @@
     return cle ? traduire(cle) : ressource;
   };
 
+  // Makes text easy to compare: removes accents and capitals, so "Électricité" matches "electricite".
   const normaliser = (v) => String(v ?? "")
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .toLocaleLowerCase();
 
   try {
+    // Show the logged-in user name in the sidebar (it was saved at login).
     const savedName = localStorage.getItem('username');
     if (savedName && $('#username')) $('#username').textContent = savedName;
   } catch (e) {}
 
+  // ---- Light / dark theme ----
   const root = document.documentElement;
   const themeButton = $('#theme');
+  // Applies the theme (light or dark) and remembers the choice for the next page.
   function setTheme(name) {
     root.setAttribute('data-theme', name);
     root.setAttribute('data-bs-theme', name);
@@ -75,6 +88,7 @@
   }
   setTheme(localStorage.getItem('theme') || 'light');
 
+  // Small helper to call the Flask server. It never crashes: on an error it returns { error: true }.
   async function api(url, options) {
     try {
       const res = await fetch(url, options);
@@ -97,6 +111,8 @@
   }
 
   // Fonction pour exécuter le tri via le Backend Python/C (Flask)
+  // Sorts the measures with the C program (through Flask).
+  // It is called ONLY when the user clicks the "Trier" button (not when the sort list changes).
   async function executerTriBackend() {
     const typeTri = document.getElementById("sortType")?.value || "valeur";
     let endpoint = '/api/sort'; // par défaut valeur croissante
@@ -117,6 +133,7 @@
     }
   }
 
+  // Returns only the measures that match the search box, the resource filter and the "anomalies only" button.
   function obtenirMesuresFiltrees() {
     const recherche = normaliser(document.getElementById("q")?.value || "");
     const ressourceFilter = document.getElementById("resourceFilter")?.value || "all";
@@ -142,6 +159,7 @@
     return resultat;
   }
 
+  // Draws the table (one row per measure) and updates the counter under the table.
   function afficherMesures() {
     const tbody = document.getElementById("tb");
     if (!tbody) return;
@@ -170,17 +188,20 @@
     mettreAJourCompteur(mesuresAffichees.length, mesures.length);
   }
 
+  // Updates the text under the table, for example "12 measures displayed out of 40".
   function mettreAJourCompteur(n, total) {
     const el = document.getElementById("measure-count");
     if (el) el.textContent = traduire("count").replace("{n}", n).replace("{t}", total);
   }
 
+  // Safety: turns special characters (< > & quotes) into harmless text so data can never inject HTML into the page.
   function echapper(v) {
     return String(v).replace(/[&<>"']/g, c => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
     }[c]));
   }
 
+  // Called by the red "Supprimer" button of each row: asks for confirmation, then deletes the measure.
   window.deleteMeasure = async (id) => {
     if (!confirm(traduire("confirm_delete"))) return;
     const res = await api('/api/measure/' + id, { method: 'DELETE' });
@@ -195,18 +216,20 @@
     }
   };
 
+  // When the page is ready: connect the search box, the filters and the buttons.
   document.addEventListener("DOMContentLoaded", () => {
+    // Typing in the search box, or changing the resource filter, updates the table immediately.
     document.getElementById("q")?.addEventListener("input", afficherMesures);
     document.getElementById("resourceFilter")?.addEventListener("change", afficherMesures);
     
-    // Changement du type de tri ou clic sur le bouton Trier -> Appel au backend Python/C
-    document.getElementById("sortType")?.addEventListener("change", executerTriBackend);
 
+    // The sort is applied ONLY when the user clicks "Trier".
     const btnSort = $('#sort');
     if (btnSort) {
       btnSort.addEventListener("click", executerTriHeader);
     }
 
+    // Sorts, then shows a small success message for 3 seconds.
     async function executerTriHeader() {
       await executerTriBackend();
       const msg = $('#msg');
@@ -216,6 +239,7 @@
       }
     }
 
+    // "Anomalies seulement" button: switches the filter on / off.
     const btnAnom = $('#anom');
     if (btnAnom) {
       btnAnom.addEventListener('click', (e) => {
@@ -225,8 +249,10 @@
       });
     }
 
+    // Finally: load the measures from the server.
     chargerDonnees();
   });
 
+  // Lets i18n.js redraw the table when the language changes.
   window.actualiserMesures = afficherMesures;
 })();
