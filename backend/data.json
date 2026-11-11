@@ -379,11 +379,11 @@
   },
   {
     "id": 44,
-    "batiment": "Amphi A",
+    "batiment": "Biblio",
     "ressource": "electricite",
-    "valeur": 240.0,
-    "seuil": 250.0,
-    "date": "12/27/2026",
-    "alerte": false
+    "valeur": 200.0,
+    "seuil": 120.0,
+    "date": "10/21/2026",
+    "alerte": true
   }
 ]
