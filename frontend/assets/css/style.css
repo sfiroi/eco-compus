@@ -324,3 +324,63 @@ button:hover {
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+/* =====================================
+   LOGIN - langue (menu), erreur, arabe
+===================================== */
+
+/* Variables utilisees par le menu de traduction (absentes de ce fichier avant) */
+:root {
+    --surface: #ffffff;
+    --ink: #1a2520;
+    --line: #e2e8e4;
+}
+
+/* Message d'erreur sous le formulaire */
+.login-error {
+    max-height: 0;
+    margin: 0;
+    overflow: hidden;
+    opacity: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #c0392b;
+    transition: max-height .3s ease, opacity .3s ease, margin .3s ease;
+}
+.login-error.show {
+    max-height: 60px;
+    margin: -4px 0 14px;
+    opacity: 1;
+}
+button[type="submit"]:disabled { opacity: .7; cursor: wait; }
+
+/* Hole left in the form while #loginBtn has jumped off the page.
+   Without this, the form would collapse the moment the button leaves. */
+.login-btn-anchor {
+    min-height: 48px;
+}
+
+/* Added by login.js only while the captcha answer is still wrong.
+   position:fixed lets the button sit anywhere in the window.
+   JavaScript sets left, top and a pixel width (a percent width would
+   stretch the button across the whole screen and it would never escape). */
+#loginBtn.is-fleeing {
+    position: fixed;
+    z-index: 80;
+    margin: 0;
+    box-shadow: 0 12px 28px rgba(15, 40, 30, 0.22);
+}
+
+/* ARABE uniquement : le selecteur de langue passe de l'autre cote
+   (a gauche, au-dessus du formulaire) pour ne plus cacher le logo */
+html[dir="rtl"] .lang-switch {
+    right: auto !important;
+    left: 20px !important;
+}
+html[dir="rtl"] .lang-switch #translation-menu {
+    right: auto !important;
+    left: 0 !important;
+}
+html[dir="rtl"] .lang-switch #translation-menu button {
+    text-align: right !important;
+}
