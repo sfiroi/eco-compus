@@ -1,7 +1,7 @@
 from pathlib import Path
 import sys
 
-# La racine du projet contient le dossier ai/
+# The project root contains the folder ai/ (the AI advice module)
 ROOT = Path(__file__).resolve().parent.parent
 
 if str(ROOT) not in sys.path:
@@ -9,20 +9,24 @@ if str(ROOT) not in sys.path:
 
 from ai.conseil import generer_conseil
 
+# Flask = the small web server that sends the pages and answers the /api/... requests of the website.
 from flask import Flask, jsonify, request, send_from_directory
 
 import subprocess, json, os
 
 ROOT = Path(__file__).resolve().parent.parent
+# Important paths: backend/ and frontend/ folders, the CSV and JSON data files and the C program (api.exe).
 B = ROOT / 'backend'
 F = ROOT / 'frontend'
 CSV = B / 'measures_in.csv'
 JSON = B / 'data.json'
 EXE = B / ('api.exe' if os.name == 'nt' else 'api')
 
+# Creates the server. static_folder = the frontend folder, so Flask also serves the CSS / JS / HTML files.
 app = Flask(__name__, static_folder=str(F), static_url_path='')
 
 
+# Rewrites measures_in.csv from data.json (keeps the two data files identical).
 def write_json_to_csv():
     with open(JSON, encoding='utf-8') as f:
         data = json.load(f)
@@ -36,6 +40,7 @@ def write_json_to_csv():
             )
 
 
+# Keeps data.json and measures_in.csv in sync: the most recently modified file wins.
 def sync_files():
     if not JSON.exists() or not CSV.exists():
         return
@@ -52,6 +57,8 @@ def sync_files():
             raise RuntimeError(p.stdout or p.stderr or 'Erreur sync')
 
 
+# Runs the C program (api.exe) with a command (total, max, compare, add...) and returns its JSON answer.
+# All the calculations of the project are done by the C code; Flask only forwards the request.
 def c(cmd, *args):
     sync_files()
 
@@ -94,6 +101,7 @@ def c(cmd, *args):
         )
 
 
+# Tells the browser never to keep old answers in cache, so the data on screen is always fresh.
 @app.after_request
 def nc(r):
     r.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
@@ -101,6 +109,7 @@ def nc(r):
 
 
 # Page de connexion
+# Page routes: "/" opens the login page, "/dashboard" opens the dashboard.
 @app.get('/')
 @app.get('/login')
 @app.get('/login.html')
@@ -115,6 +124,7 @@ def home():
     return send_from_directory(F, 'dashboard.html')
 
 
+# Sends ALL the measures as JSON (used by the dashboard, Mesures and Analyses).
 @app.get('/api/data')
 def data():
     sync_files()
@@ -122,6 +132,7 @@ def data():
         return jsonify(json.load(f))
 
 
+# One route for several read-only commands: anomalies, search, evaluation, max, min, compare, average.
 @app.get('/api/<cmd>')
 def getcmd(cmd):
     if cmd == 'anomalies':
@@ -160,11 +171,13 @@ def getcmd(cmd):
     return jsonify({'error': 'unknown'}), 404
 
 
+# Total consumption of one resource (electricite, eau or chauffage).
 @app.get('/api/total/<r>')
 def total(r):
     return jsonify(c('total', r))
 
 
+# Sorting routes: the C program sorts the measures by value, by id, or by id descending.
 @app.post('/api/sort')
 def sort():
     return jsonify(c('sort_val'))
@@ -179,6 +192,7 @@ def sort_id():
 def sort_id_desc():
     return jsonify(c('sort_id_desc'))
 
+# Add a new measure (sent as JSON by the Gestion page).
 @app.post('/api/measure')
 def add():
     d = request.get_json()
@@ -192,11 +206,13 @@ def add():
     ))
 
 
+# Delete the measure that has this id.
 @app.delete('/api/measure/<int:i>')
 def delete(i):
     return jsonify(c('delete', i))
 
 
+# Checks if a measure is valid and if it is above its threshold, without saving it.
 @app.post('/api/verify')
 def verify():
     d = request.get_json()
@@ -219,6 +235,7 @@ def chat():
     return send_from_directory(F, "chat.html")
 
 
+# The AI assistant: sends the question + the real measures to the AI (Groq) and returns its advice.
 @app.post("/api/conseil")
 def api_conseil():
     data = request.get_json(silent=True) or {}
@@ -263,5 +280,6 @@ def api_conseil():
             )
         }), 502
 
+# Starts the server on port 5000 when you run: python backend\app.py
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
