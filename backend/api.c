@@ -1,7 +1,19 @@
 #include "gestion.h"
 
-#define MAX_MESURES 1000
+/* =========================================================
+   api.c  -  command-line bridge between Flask and gestion.c
 
+   Flask (app.py) starts this program like:
+     api.exe  measures_in.csv  data.json  <command>  [arguments...]
+
+   Every command prints ONE JSON document on stdout.
+   Exit code 0 = success, 1 = the command failed, 2 = bad usage.
+   The helpers below only print JSON. The real work is in gestion.c.
+   ========================================================= */
+
+#define MAX_MESURES 1000   /* maximum number of measures kept in memory */
+
+/* Prints a C string as a JSON string, escaping " and \. */
 static void js(const char *s) {
     putchar('"');
     for (const char *p = s; *p; p++) {
@@ -11,6 +23,7 @@ static void js(const char *s) {
     putchar('"');
 }
 
+/* Prints one Mesure as a JSON object: id, building, resource, value, threshold, date, alert. */
 static void jm(Mesure m) {
     printf("{\"id\":%d,\"batiment\":", m.id);
     js(m.batiment);
@@ -21,6 +34,7 @@ static void jm(Mesure m) {
     printf(",\"alerte\":%s}", m.alerte ? "true" : "false");
 }
 
+/* Prints a JSON array of n measures. */
 static void jms(Mesure *t, int n) {
     putchar('[');
     for (int i = 0; i < n; i++) {
@@ -30,16 +44,19 @@ static void jms(Mesure *t, int n) {
     putchar(']');
 }
 
+/* Reads the CSV into t. *n becomes the number of rows. Returns 0 if the file cannot be opened. */
 static int load(Mesure *t, int *n, const char *csv) {
     *n = conv((char *)csv, t, MAX_MESURES);
     return *n >= 0;
 }
 
+/* Writes the same measures to both the CSV and the JSON file. Both must succeed. */
 static int saveall(Mesure *t, int n, const char *csv, const char *json) {
     return sauvegarderCSV(csv, t, n) && sauvegarderJSON(json, t, n);
 }
 
 int main(int ac, char **av) {
+    /* Need at least: program, csv path, json path, command name. */
     if (ac < 4) return 2;
 
     const char *csv = av[1], *json = av[2], *cmd = av[3];
@@ -51,23 +68,27 @@ int main(int ac, char **av) {
         return 1;
     }
 
+    /* sync: rebuild data.json from the CSV (or the other way, Flask decides which file is newer). */
     if (!strcmp(cmd, "sync")) {
         if (!saveall(t, n, csv, json)) return 1;
         printf("{\"ok\":true}");
         return 0;
     }
 
+    /* list: every measure, as a JSON array. */
     if (!strcmp(cmd, "list")) {
         jms(t, n);
         return 0;
     }
 
+    /* evaluation: star rating (1-5) for one building + resource + year. Args: building, resource, year. */
     if (!strcmp(cmd, "evaluation") && ac >= 7) {
         int s = evaluationAnnee(t, n, av[4], av[5], av[6]);
         printf("{\"stars\":%d}", s);
         return 0;
     }
 
+    /* anomalies: measures whose value is above the threshold. */
     if (!strcmp(cmd, "anomalies")) {
         int k = 0;
         for (int i = 0; i < n; i++)
@@ -84,7 +105,7 @@ int main(int ac, char **av) {
         printf("]}");
         return 0;
     }
-    /* Tri par valeur croissante */
+    /* sort_val: sort by value (ascending) and save CSV + JSON. */
 if (!strcmp(cmd, "sort_val")) {
     trieMesures(t, n);
 
@@ -99,7 +120,7 @@ if (!strcmp(cmd, "sort_val")) {
     return 0;
 }
 
-/* Tri par ID décroissant */
+/* sort_id_desc: bubble sort by id, largest id first, then save. */
 if (!strcmp(cmd, "sort_id_desc")) {
     for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - i - 1; j++) {
@@ -122,6 +143,7 @@ if (!strcmp(cmd, "sort_id_desc")) {
     return 0;
 }
 
+    /* sort_id: bubble sort by id, smallest id first, then save. */
     if (!strcmp(cmd, "sort_id")) {
     for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - i - 1; j++) {
@@ -146,6 +168,7 @@ if (!strcmp(cmd, "sort_id_desc")) {
 }
     
 
+    /* search: measures whose building or resource contains the word in av[4]. */
     if (!strcmp(cmd, "search") && ac >= 5) {
         putchar('[');
         int f = 1;
@@ -160,6 +183,7 @@ if (!strcmp(cmd, "sort_id_desc")) {
         return 0;
     }
 
+    /* max / min: extreme measure for one building (av[4]) and one resource (av[5]). */
     if ((!strcmp(cmd, "max") || !strcmp(cmd, "min")) && ac >= 6) {
         Mesure m = !strcmp(cmd, "max")
             ? max(t, n, av[4], av[5])
@@ -170,6 +194,7 @@ if (!strcmp(cmd, "sort_id_desc")) {
         return 0;
     }
 
+    /* compare: sum of one resource in building A (av[4]) vs building B (av[5]). Resource is av[6]. */
     if (!strcmp(cmd, "compare") && ac >= 7) {
         float a = 0, b = 0;
         int fa = 0, fb = 0;
@@ -191,6 +216,7 @@ if (!strcmp(cmd, "sort_id_desc")) {
         return 0;
     }
 
+    /* total: campus-wide sum. av[4] is electricite, eau, or anything else (treated as chauffage). */
     if (!strcmp(cmd, "total") && ac >= 5) {
         float v = 0;
         if (!strcmp(av[4], "electricite")) v = calculerTotalEnergie(t, n);
@@ -201,6 +227,7 @@ if (!strcmp(cmd, "sort_id_desc")) {
     }
 
     
+/* average: mean value for one building, one resource and one year (date format MM/DD/YYYY). */
 if (!strcmp(cmd, "average") && ac >= 7) {
     const char *batiment = av[4];
     const char *ressource = av[5];
@@ -251,6 +278,7 @@ if (!strcmp(cmd, "average") && ac >= 7) {
 }
 
 
+    /* add: append a measure. Args: building, resource, value, threshold, date. Alert is set if value > threshold. */
     if (!strcmp(cmd, "add") && ac >= 9) {
         Mesure m = {0};
         strncpy(m.batiment, av[4], 49);
@@ -268,6 +296,7 @@ if (!strcmp(cmd, "average") && ac >= 7) {
         return 0;
     }
 
+    /* delete: remove the measure whose id is av[4], then save. */
     if (!strcmp(cmd, "delete") && ac >= 5) {
         int id = atoi(av[4]), found = 0;
         for (int i = 0; i < n; i++)
@@ -281,6 +310,7 @@ if (!strcmp(cmd, "average") && ac >= 7) {
         return 0;
     }
 
+    /* verify: check a measure without saving it. Same arguments as add. */
     if (!strcmp(cmd, "verify") && ac >= 9) {
         Mesure m = {0};
         strncpy(m.batiment, av[4], 49);
@@ -298,5 +328,6 @@ if (!strcmp(cmd, "average") && ac >= 7) {
     }
     
 
+    /* Unknown command name. */
     return 2;
 }
