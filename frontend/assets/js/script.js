@@ -17,6 +17,12 @@
   }
 
   const mesures = await chargerMesures();
+  try {
+    // Show the logged-in user name in the sidebar (it was saved at login).
+    const savedName = localStorage.getItem('username');
+    if (savedName && $('#username')) $('#username').textContent = savedName;
+  } catch (e) {}
+
 
   // 1. Tableau
   function afficherMesures(dataMesures) {
